@@ -142,12 +142,13 @@ public class BillForm {
 			RowAdd = false;
 		}
 		table = new JTable(model);
-		int t=0;
-		for(int i =0;i<rowCount+1;i++)
+		int Amount = 0;
+		int i;
+		rowCount = table.getRowCount();
+		for(i = 0;i<rowCount;i++)
 		{
-			t = t+(Integer.parseInt(table.getValueAt(i, 3).toString())*Integer.parseInt(table.getValueAt(i, 4).toString()));
-			System.out.println(t);
+			Amount = Amount + (Integer.parseInt(table.getValueAt(i, 3)+"")*Integer.parseInt(table.getValueAt(i, 4)+""));
 		}
-		total.setText(Integer.toString(t));
+		total.setText(String.valueOf(Amount));
 	}
 }
