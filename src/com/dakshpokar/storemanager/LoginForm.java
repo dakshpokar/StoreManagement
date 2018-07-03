@@ -127,7 +127,7 @@ public class LoginForm {
 			{
 				priv = Integer.parseInt(rs.getString(4));
 				clientWindow = new ClientDashboard();
-				clientWindow.frame.setVisible(true);
+				clientWindow.frmDashboard.setVisible(true);
 				frmLogin.setVisible(false);
 			}
 			else

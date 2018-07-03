@@ -14,33 +14,28 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.Vector;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import java.awt.Color;
 
 public class BillForm {
 
-	public JFrame frame;
+	public JFrame frmBill;
 	private JTable table;
-	
+	private int id;
+	private JTextField total;
+	private JTextField txtTotal;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BillForm window = new BillForm();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 */
-	public BillForm() {
+	public BillForm(int id) {
+		this.id = id;
 		initialize();
 	}
 
@@ -48,11 +43,12 @@ public class BillForm {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frmBill = new JFrame();
+		frmBill.setTitle("Bill");
 		
-		frame.setBounds(100, 100, 717, 398);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmBill.setBounds(100, 100, 717, 398);
+		frmBill.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmBill.getContentPane().setLayout(null);
 		
 		table = new JTable(){
 			public boolean isCellEditable(int row, int column){
@@ -70,17 +66,17 @@ public class BillForm {
 		table.setBounds(39, 25, 480, 300);
 		
 		JScrollPane scroll=new JScrollPane(table);
-		scroll.setSize(480, 300);
-		scroll.setLocation(39, 25);
+		scroll.setSize(480, 239);
+		scroll.setLocation(39, 56);
 		
-		frame.getContentPane().add(scroll);
+		frmBill.getContentPane().add(scroll);
 		
 		JButton btnNewButton = new JButton("Add Item");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					AdderForm adderForm = new AdderForm();
-					frame.setVisible(false);
+					frmBill.setVisible(false);
 
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -89,10 +85,39 @@ public class BillForm {
 				
 			}
 		});
-		btnNewButton.setBounds(552, 20, 117, 25);
+		btnNewButton.setBounds(552, 58, 117, 25);
 	
-		frame.getContentPane().add(btnNewButton);
-		frame.setVisible(true);
+		frmBill.getContentPane().add(btnNewButton);
+		
+		JLabel lblBillNo = new JLabel("Bill No.: ");
+		lblBillNo.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblBillNo.setBounds(39, 27, 78, 20);
+		frmBill.getContentPane().add(lblBillNo);
+		
+		JLabel billid = new JLabel((String) null);
+		billid.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		billid.setBounds(94, 25, 78, 20);
+		
+		billid.setText(Integer.toString(id));
+		frmBill.getContentPane().add(billid);
+		
+		total = new JTextField();
+		total.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		total.setBackground(Color.WHITE);
+		total.setEditable(false);
+		total.setColumns(10);
+		total.setBounds(370, 294, 149, 40);
+		frmBill.getContentPane().add(total);
+		
+		txtTotal = new JTextField();
+		txtTotal.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		txtTotal.setText("Total");
+		txtTotal.setEditable(false);
+		txtTotal.setColumns(10);
+		txtTotal.setBackground(Color.WHITE);
+		txtTotal.setBounds(276, 294, 94, 40);
+		frmBill.getContentPane().add(txtTotal);
+		frmBill.setVisible(true);
 		
 	}
 	public void AddRow()
@@ -117,6 +142,12 @@ public class BillForm {
 			RowAdd = false;
 		}
 		table = new JTable(model);
-		
+		int t=0;
+		for(int i =0;i<rowCount+1;i++)
+		{
+			t = t+(Integer.parseInt(table.getValueAt(i, 3).toString())*Integer.parseInt(table.getValueAt(i, 4).toString()));
+			System.out.println(t);
+		}
+		total.setText(Integer.toString(t));
 	}
 }

@@ -52,7 +52,7 @@ import java.awt.event.ItemEvent;
 
 public class AdderForm {
 
-	private JFrame frame;
+	private JFrame frmAddItems;
 	private JTable table;
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
 	static final String DB_URL = "jdbc:mysql://localhost/users";
@@ -74,7 +74,7 @@ public class AdderForm {
 			public void run() {
 				try {
 					AdderForm window = new AdderForm();
-					window.frame.setVisible(true);
+					window.frmAddItems.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -95,18 +95,19 @@ public class AdderForm {
 	 * @throws SQLException 
 	 */
 	private void initialize() throws SQLException {
-		frame = new JFrame();	
-		frame.setBounds(100, 100, 636, 455);
+		frmAddItems = new JFrame();	
+		frmAddItems.setTitle("Add Items");
+		frmAddItems.setBounds(100, 100, 636, 455);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.addWindowListener(new WindowAdapter() {
+		frmAddItems.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent we)
 			{
-				ClientDashboard.billForm.frame.setVisible(true);
-				frame.setVisible(false);
+				ClientDashboard.billForm.frmBill.setVisible(true);
+				frmAddItems.setVisible(false);
 			}
 		});
-		frame.getContentPane().setLayout(null);
+		frmAddItems.getContentPane().setLayout(null);
 
 		final JComboBox comboBox = new JComboBox();
 		final JTextField txtpnEnterAKeyword = new JTextField();
@@ -205,7 +206,7 @@ public class AdderForm {
 			});
 			txtpnEnterAKeyword.setFont(new Font("Dialog", Font.PLAIN, 18));
 			txtpnEnterAKeyword.setBounds(73, 57, 340, 40);
-			frame.getContentPane().add(txtpnEnterAKeyword);
+			frmAddItems.getContentPane().add(txtpnEnterAKeyword);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setBounds(73, 127, 480, 189);
 			JScrollPane scroll=new JScrollPane(table);
@@ -219,8 +220,8 @@ public class AdderForm {
 			        Point point = mouseEvent.getPoint();
 			        int row = table.rowAtPoint(point);
 			        if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
-			        	ClientDashboard.billForm.frame.setVisible(true);
-						frame.setVisible(false);
+			        	ClientDashboard.billForm.frmBill.setVisible(true);
+						frmAddItems.setVisible(false);
 						array = new String[5];
 						int rowID = table.getSelectedRow();
 						for(int i = 0; i<4; i++)
@@ -232,7 +233,7 @@ public class AdderForm {
 			        }
 			    }
 			});
-			frame.getContentPane().add(scroll, BorderLayout.CENTER);
+			frmAddItems.getContentPane().add(scroll, BorderLayout.CENTER);
 				
 			JButton button = new JButton("-");
 			button.addActionListener(new ActionListener() {
@@ -249,7 +250,7 @@ public class AdderForm {
 			});
 			button.setFont(new Font("Tahoma", Font.PLAIN, 17));
 			button.setBounds(73, 346, 52, 40);
-			frame.getContentPane().add(button);
+			frmAddItems.getContentPane().add(button);
 			
 			JButton button_1 = new JButton("+");
 			button_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -260,26 +261,26 @@ public class AdderForm {
 				}
 			});
 			button_1.setBounds(206, 346, 52, 40);
-			frame.getContentPane().add(button_1);
+			frmAddItems.getContentPane().add(button_1);
 			
 			JLabel lblEnterTheItem = new JLabel("Enter the item to be searched:");
 			lblEnterTheItem.setBounds(73, 33, 188, 14);
-			frame.getContentPane().add(lblEnterTheItem);
+			frmAddItems.getContentPane().add(lblEnterTheItem);
 			
 			JLabel lblListOfItems = new JLabel("List of items found: ");
 			lblListOfItems.setBounds(73, 108, 188, 14);
-			frame.getContentPane().add(lblListOfItems);
+			frmAddItems.getContentPane().add(lblListOfItems);
 			
 			JLabel lblSelectQuantityTo = new JLabel("Select Quantity to be added:");
 			lblSelectQuantityTo.setBounds(73, 327, 188, 14);
-			frame.getContentPane().add(lblSelectQuantityTo);
+			frmAddItems.getContentPane().add(lblSelectQuantityTo);
 			
 			Quantity = new JTextField();
 			Quantity.setFont(new Font("Tahoma", Font.PLAIN, 17));
 			Quantity.setText("1");
 			Quantity.setHorizontalAlignment(SwingConstants.RIGHT);
 			Quantity.setBounds(122, 346, 86, 41);
-			frame.getContentPane().add(Quantity);
+			frmAddItems.getContentPane().add(Quantity);
 			Quantity.setColumns(10);
 			
 			JButton btnAdd = new JButton("Add");
@@ -293,8 +294,8 @@ public class AdderForm {
 						JOptionPane.showMessageDialog(null, "You cannot add 0 items!");
 					}
 					else {
-						ClientDashboard.billForm.frame.setVisible(true);
-						frame.setVisible(false);
+						ClientDashboard.billForm.frmBill.setVisible(true);
+						frmAddItems.setVisible(false);
 					for(int i = 0; i<4; i++)
 					{
 						array[i] = table.getValueAt(rowID, i).toString();
@@ -306,10 +307,10 @@ public class AdderForm {
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnAdd.setBounds(454, 346, 100, 40);
-			frame.getContentPane().add(btnAdd);
+			frmAddItems.getContentPane().add(btnAdd);
 			
-			frame.getContentPane().add(comboBox);
-			frame.setVisible(true);
+			frmAddItems.getContentPane().add(comboBox);
+			frmAddItems.setVisible(true);
 			
 			
 		}
@@ -365,5 +366,6 @@ public class AdderForm {
 	    return new DefaultTableModel(data, columnNames);
 
 	}
+	
 }
 
