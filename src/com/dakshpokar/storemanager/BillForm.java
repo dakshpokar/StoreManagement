@@ -15,9 +15,12 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class BillForm {
 
@@ -102,11 +105,12 @@ public class BillForm {
 		frmBill.getContentPane().add(billid);
 		
 		total = new JTextField();
+		total.setHorizontalAlignment(SwingConstants.RIGHT);
 		total.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		total.setBackground(Color.WHITE);
 		total.setEditable(false);
 		total.setColumns(10);
-		total.setBounds(370, 294, 149, 40);
+		total.setBounds(129, 294, 390, 40);
 		frmBill.getContentPane().add(total);
 		
 		txtTotal = new JTextField();
@@ -115,8 +119,38 @@ public class BillForm {
 		txtTotal.setEditable(false);
 		txtTotal.setColumns(10);
 		txtTotal.setBackground(Color.WHITE);
-		txtTotal.setBounds(276, 294, 94, 40);
+		txtTotal.setBounds(39, 294, 94, 40);
 		frmBill.getContentPane().add(txtTotal);
+		
+		JButton btnRemoveItem = new JButton("Remove Item");
+		btnRemoveItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int rowID = table.getSelectedRow();
+				System.out.println(rowID);
+				if(rowID == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Please select item!");
+				}
+				int getQuantity = Integer.parseInt(table.getValueAt(rowID, 4).toString());
+				if(getQuantity == 0)
+				{
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					model.removeRow(rowID);
+					table.setModel(model);
+				}
+				else
+				{
+					table.setValueAt(String.valueOf(getQuantity-1), rowID, 4);
+				}
+			}
+			
+		});
+		btnRemoveItem.setBounds(552, 94, 117, 25);
+		frmBill.getContentPane().add(btnRemoveItem);
+		
+		JButton btnRemoveAll = new JButton("Remove All");
+		btnRemoveAll.setBounds(552, 130, 117, 25);
+		frmBill.getContentPane().add(btnRemoveAll);
 		frmBill.setVisible(true);
 		
 	}
