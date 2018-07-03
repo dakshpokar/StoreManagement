@@ -47,6 +47,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.JComboBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class AdderForm {
 
@@ -58,6 +60,7 @@ public class AdderForm {
 	static final String PASS = "jpassword";
 	ResultSet rs = null;
 	ResultSet rs2 = null;
+	ResultSet rs3 = null;
 	Statement stmt = null;
 	Connection conn = null;
 	public static boolean trueness = false;
@@ -105,7 +108,36 @@ public class AdderForm {
 		});
 		frame.getContentPane().setLayout(null);
 
-		JComboBox comboBox = new JComboBox();
+		final JComboBox comboBox = new JComboBox();
+		final JTextField txtpnEnterAKeyword = new JTextField();
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				String text = txtpnEnterAKeyword.getText().toString();
+				String cat = comboBox.getSelectedItem().toString();
+				String s;
+				if(cat.equals("All"))
+				{
+					s= "select * from itemlist where item_name like '" + text + "%'";
+				}
+				else
+				{
+					s = "select * from itemlist where item_name like '" + text + "%'" + " and item_category='"+cat+"'";
+				}
+				try {
+					rs2 = stmt.executeQuery(s);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					table.setModel(buildTableModel(rs2));
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		comboBox.setFont(new Font("Dialog", Font.PLAIN, 18));
 		comboBox.setBackground(Color.WHITE);
 		comboBox.setBounds(412, 57, 140, 40);
 		
@@ -128,22 +160,28 @@ public class AdderForm {
 			};
 			rs.close();
 			String catsql;
-			catsql = "select distinct item_category from itemlist";
-			ResultSet rs3;
-			rs3 = stmt.executeQuery(catsql);
 			comboBox.addItem("All");
+			catsql = "select distinct item_category from itemlist";
+			rs3 = stmt.executeQuery(catsql);
 			while(rs3.next())
 			{
 				rs3.getRow();
 				comboBox.addItem(rs3.getString(1));
 			}
-			final JTextField txtpnEnterAKeyword = new JTextField();
 			txtpnEnterAKeyword.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {
 									
+					String cat = comboBox.getSelectedItem().toString();
 					String text = txtpnEnterAKeyword.getText().toString();
-					String s = "select * from itemlist where item_name like '" + text + "%'";
-					try {
+					String s;
+					if(cat.equals("All"))
+					{
+						s= "select * from itemlist where item_name like '" + text + "%'";
+					}
+					else
+					{
+						s = "select * from itemlist where item_name like '" + text + "%'" + " and item_category='"+cat+"'";
+					}try {
 						rs2 = stmt.executeQuery(s);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
