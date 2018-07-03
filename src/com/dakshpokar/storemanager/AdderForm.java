@@ -27,6 +27,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.*;
 import java.util.*;
 
@@ -44,6 +46,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.JComboBox;
 
 public class AdderForm {
 
@@ -91,8 +94,21 @@ public class AdderForm {
 	private void initialize() throws SQLException {
 		frame = new JFrame();	
 		frame.setBounds(100, 100, 636, 455);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent we)
+			{
+				ClientDashboard.billForm.frame.setVisible(true);
+				frame.setVisible(false);
+			}
+		});
 		frame.getContentPane().setLayout(null);
+
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBackground(Color.WHITE);
+		comboBox.setBounds(412, 57, 140, 40);
+		
 		try {
 			Class.forName(JDBC_DRIVER);
 			System.out.println("Connecting to Database....");
@@ -102,6 +118,25 @@ public class AdderForm {
 			String sql;
 			sql = "select * from itemlist";
 			rs = stmt.executeQuery(sql);
+			table = new JTable(buildTableModel(rs)){
+				public boolean isCellEditable(int row, int column){
+				    return false;
+				  }
+				public boolean getScrollableTracksViewportWidth() {
+					   return getPreferredSize().width < getParent().getWidth();
+					 }
+			};
+			rs.close();
+			String catsql;
+			catsql = "select distinct item_category from itemlist";
+			ResultSet rs3;
+			rs3 = stmt.executeQuery(catsql);
+			comboBox.addItem("All");
+			while(rs3.next())
+			{
+				rs3.getRow();
+				comboBox.addItem(rs3.getString(1));
+			}
 			final JTextField txtpnEnterAKeyword = new JTextField();
 			txtpnEnterAKeyword.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {
@@ -131,17 +166,8 @@ public class AdderForm {
 				}
 			});
 			txtpnEnterAKeyword.setFont(new Font("Dialog", Font.PLAIN, 18));
-			txtpnEnterAKeyword.setBounds(73, 57, 480, 40);
+			txtpnEnterAKeyword.setBounds(73, 57, 340, 40);
 			frame.getContentPane().add(txtpnEnterAKeyword);
-			   table = new JTable(buildTableModel(rs)){
-				public boolean isCellEditable(int row, int column){
-				    return false;
-				  }
-				public boolean getScrollableTracksViewportWidth() {
-					   return getPreferredSize().width < getParent().getWidth();
-					 }
-			};
-			
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setBounds(73, 127, 480, 189);
 			JScrollPane scroll=new JScrollPane(table);
@@ -221,21 +247,30 @@ public class AdderForm {
 			JButton btnAdd = new JButton("Add");
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ClientDashboard.billForm.frame.setVisible(true);
-					frame.setVisible(false);
+					
 					array = new String[5];
 					int rowID = table.getSelectedRow();
+					if(rowID == -1)
+					{
+						JOptionPane.showMessageDialog(null, "You cannot add 0 items!");
+					}
+					else {
+						ClientDashboard.billForm.frame.setVisible(true);
+						frame.setVisible(false);
 					for(int i = 0; i<4; i++)
 					{
 						array[i] = table.getValueAt(rowID, i).toString();
 					}
 					array[4] = Quantity.getText().toString();
 					ClientDashboard.billForm.AddRow();
+					}
 				}
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnAdd.setBounds(454, 346, 100, 40);
 			frame.getContentPane().add(btnAdd);
+			
+			frame.getContentPane().add(comboBox);
 			frame.setVisible(true);
 			
 			

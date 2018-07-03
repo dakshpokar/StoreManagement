@@ -93,8 +93,8 @@ public class LoginForm {
 	}
 	private void check()
 	{
-		username = textField.getText();
-		password = passwordField.getText();
+		username = "dakshpokar"; //textField.getText();
+		password = "password"; //passwordField.getText();
 		if(username.equals(""))
 		{
 			JOptionPane.showMessageDialog(null, "Authorization Failure!");
