@@ -72,7 +72,6 @@ public class BillForm {
 		scroll.setSize(480, 239);
 		scroll.setLocation(39, 56);
 		
-		frmBill.getContentPane().add(scroll);
 		
 		JButton btnNewButton = new JButton("Add Item");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -88,7 +87,7 @@ public class BillForm {
 				
 			}
 		});
-		btnNewButton.setBounds(552, 58, 117, 25);
+		btnNewButton.setBounds(552, 58, 137, 25);
 	
 		frmBill.getContentPane().add(btnNewButton);
 		
@@ -132,7 +131,7 @@ public class BillForm {
 					JOptionPane.showMessageDialog(null, "Please select item!");
 				}
 				int getQuantity = Integer.parseInt(table.getValueAt(rowID, 4).toString());
-				if(getQuantity == 0)
+				if(getQuantity <= 1)
 				{
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					model.removeRow(rowID);
@@ -142,17 +141,44 @@ public class BillForm {
 				{
 					table.setValueAt(String.valueOf(getQuantity-1), rowID, 4);
 				}
+				setTotal();
 			}
 			
 		});
-		btnRemoveItem.setBounds(552, 94, 117, 25);
+		frmBill.getContentPane().add(scroll);
+		btnRemoveItem.setBounds(552, 94, 137, 25);
 		frmBill.getContentPane().add(btnRemoveItem);
 		
 		JButton btnRemoveAll = new JButton("Remove All");
-		btnRemoveAll.setBounds(552, 130, 117, 25);
+		btnRemoveAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rowID = table.getSelectedRow();
+				System.out.println(rowID);
+				if(rowID == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Please select item!");
+				}
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model.removeRow(rowID);
+				table.setModel(model);
+				setTotal();
+			}
+		});
+		btnRemoveAll.setBounds(552, 130, 137, 25);
 		frmBill.getContentPane().add(btnRemoveAll);
 		frmBill.setVisible(true);
 		
+	}
+	public void setTotal()
+	{
+		int Amount = 0;
+		int i;
+		int rowCount = table.getRowCount();
+		for(i = 0;i<rowCount;i++)
+		{
+			Amount = Amount + (Integer.parseInt(table.getValueAt(i, 3)+"")*Integer.parseInt(table.getValueAt(i, 4)+""));
+		}
+		total.setText(String.valueOf(Amount));
 	}
 	public void AddRow()
 	{
@@ -175,14 +201,7 @@ public class BillForm {
 			model.addRow(array);
 			RowAdd = false;
 		}
-		table = new JTable(model);
-		int Amount = 0;
-		int i;
-		rowCount = table.getRowCount();
-		for(i = 0;i<rowCount;i++)
-		{
-			Amount = Amount + (Integer.parseInt(table.getValueAt(i, 3)+"")*Integer.parseInt(table.getValueAt(i, 4)+""));
-		}
-		total.setText(String.valueOf(Amount));
+		table.setModel(model);
+		setTotal();
 	}
 }

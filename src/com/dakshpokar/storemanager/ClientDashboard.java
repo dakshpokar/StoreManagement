@@ -7,8 +7,6 @@ import javax.swing.JTable;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.javafx.collections.MappingChange.Map;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
