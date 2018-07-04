@@ -25,6 +25,7 @@ public class ClientDashboard {
 
 	public JFrame frmDashboard;
 	public static BillForm billForm;
+	public static ShowBills sBForm;
 	Connection conn=null;
 	Statement stmt=null;
 	public int id = 0;
@@ -53,7 +54,7 @@ public class ClientDashboard {
 	private void initialize() throws SQLException {
 		frmDashboard = new JFrame();
 		frmDashboard.setTitle("Dashboard");
-		frmDashboard.setBounds(100, 100, 332, 282);
+		frmDashboard.setBounds(100, 100, 360, 300);
 		//frmDashboard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDashboard.getContentPane().setLayout(null);
 		try {
@@ -143,16 +144,18 @@ public class ClientDashboard {
 
 			}
 		});
-		btnNewButton.setBounds(35, 93, 117, 40);
+		btnNewButton.setBounds(58, 90, 117, 40);
 		frmDashboard.getContentPane().add(btnNewButton);
 		
 		JButton btnShowBills = new JButton("Show Bills");
 		btnShowBills.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				sBForm = new ShowBills();
+				sBForm.frmBills.setVisible(true);
 				
 			}
 		});
-		btnShowBills.setBounds(150, 93, 117, 40);
+		btnShowBills.setBounds(173, 90, 117, 40);
 		frmDashboard.getContentPane().add(btnShowBills);
 		
 		JLabel lblWelcome = new JLabel("Welcome,");
@@ -162,23 +165,23 @@ public class ClientDashboard {
 		
 		JLabel lblUsername = new JLabel("username!");
 		lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblUsername.setBounds(104, 31, 78, 20);
+		lblUsername.setBounds(114, 31, 107, 20);
 		frmDashboard.getContentPane().add(lblUsername);
 		lblUsername.setText(ERP.loginForm.getUsername());
 		JButton btnAddItems = new JButton("Add Items");
-		btnAddItems.setBounds(150, 165, 117, 40);
+		btnAddItems.setBounds(173, 184, 117, 40);
 		frmDashboard.getContentPane().add(btnAddItems);
 		
 		JLabel lblBillRelated = new JLabel("Bill Related:");
-		lblBillRelated.setBounds(35, 68, 188, 14);
+		lblBillRelated.setBounds(58, 65, 188, 14);
 		frmDashboard.getContentPane().add(lblBillRelated);
 		
 		JLabel lblItemRelated = new JLabel("Item Related:");
-		lblItemRelated.setBounds(35, 140, 188, 14);
+		lblItemRelated.setBounds(58, 159, 188, 14);
 		frmDashboard.getContentPane().add(lblItemRelated);
 		
 		JButton btnShowItems = new JButton("Show Items");
-		btnShowItems.setBounds(35, 165, 117, 40);
+		btnShowItems.setBounds(58, 184, 117, 40);
 		frmDashboard.getContentPane().add(btnShowItems);
 		
 		final JLabel lblLogout = new JLabel("Logout");
@@ -201,7 +204,7 @@ public class ClientDashboard {
 		});
 		lblLogout.setForeground(SystemColor.textHighlight);
 		lblLogout.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblLogout.setBounds(192, 31, 75, 20);
+		lblLogout.setBounds(242, 31, 75, 20);
 		frmDashboard.getContentPane().add(lblLogout);
 		if(ERP.loginForm.getpriv() < 2)
 		{

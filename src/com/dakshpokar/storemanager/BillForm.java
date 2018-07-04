@@ -12,14 +12,21 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Vector;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+
 import javax.swing.JTextField;
+
 import java.awt.Color;
+
 import javax.swing.SwingConstants;
 
 public class BillForm {
@@ -27,8 +34,12 @@ public class BillForm {
 	public JFrame frmBill;
 	private JTable table;
 	private int id;
-	private JTextField total;
+	private JTextField finaltotal;
 	private JTextField txtTotal;
+	private JTextField txtSubtotal;
+	private JTextField total;
+	private JTextField tax;
+	private JTextField txtCgst;
 
 	/**
 	 * Launch the application.
@@ -49,10 +60,25 @@ public class BillForm {
 		frmBill = new JFrame();
 		frmBill.setTitle("Bill");
 		
-		frmBill.setBounds(100, 100, 717, 398);
-		frmBill.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmBill.setBounds(100, 100, 720, 450);
+		frmBill.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frmBill.getContentPane().setLayout(null);
-		
+		frmBill.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent we)
+			{
+				int dialogButton = 0;
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Discard this Bill?","Warning",dialogButton);
+				if(dialogResult == JOptionPane.YES_OPTION){
+					System.out.println("Bill Deleted!");
+					frmBill.dispose();
+				}
+				else
+				{
+					frmBill.setVisible(true);
+				}
+			}
+		});
 		table = new JTable(){
 			public boolean isCellEditable(int row, int column){
 			    return false;
@@ -87,6 +113,24 @@ public class BillForm {
 				
 			}
 		});
+		
+		txtTotal = new JTextField();
+		txtTotal.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		txtTotal.setText("Total");
+		txtTotal.setEditable(false);
+		txtTotal.setColumns(10);
+		txtTotal.setBackground(Color.WHITE);
+		txtTotal.setBounds(39, 346, 94, 40);
+		frmBill.getContentPane().add(txtTotal);
+		
+		txtCgst = new JTextField();
+		txtCgst.setText("Tax @ 5%");
+		txtCgst.setFont(new Font("Dialog", Font.PLAIN, 12));
+		txtCgst.setEditable(false);
+		txtCgst.setColumns(10);
+		txtCgst.setBackground(Color.WHITE);
+		txtCgst.setBounds(39, 321, 94, 25);
+		frmBill.getContentPane().add(txtCgst);
 		btnNewButton.setBounds(552, 58, 137, 25);
 	
 		frmBill.getContentPane().add(btnNewButton);
@@ -98,28 +142,20 @@ public class BillForm {
 		
 		JLabel billid = new JLabel((String) null);
 		billid.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		billid.setBounds(94, 25, 78, 20);
+		billid.setBounds(94, 27, 78, 20);
 		
 		billid.setText(Integer.toString(id));
 		frmBill.getContentPane().add(billid);
 		
-		total = new JTextField();
-		total.setHorizontalAlignment(SwingConstants.RIGHT);
-		total.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		total.setBackground(Color.WHITE);
-		total.setEditable(false);
-		total.setColumns(10);
-		total.setBounds(129, 294, 390, 40);
-		frmBill.getContentPane().add(total);
-		
-		txtTotal = new JTextField();
-		txtTotal.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		txtTotal.setText("Total");
-		txtTotal.setEditable(false);
-		txtTotal.setColumns(10);
-		txtTotal.setBackground(Color.WHITE);
-		txtTotal.setBounds(39, 294, 94, 40);
-		frmBill.getContentPane().add(txtTotal);
+		finaltotal = new JTextField();
+		finaltotal.setText("0");
+		finaltotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		finaltotal.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		finaltotal.setBackground(Color.WHITE);
+		finaltotal.setEditable(false);
+		finaltotal.setColumns(10);
+		finaltotal.setBounds(129, 346, 390, 40);
+		frmBill.getContentPane().add(finaltotal);
 		
 		JButton btnRemoveItem = new JButton("Remove Item");
 		btnRemoveItem.addActionListener(new ActionListener() {
@@ -166,12 +202,41 @@ public class BillForm {
 		});
 		btnRemoveAll.setBounds(552, 130, 137, 25);
 		frmBill.getContentPane().add(btnRemoveAll);
+		
+		txtSubtotal = new JTextField();
+		txtSubtotal.setText("Sub-Total");
+		txtSubtotal.setFont(new Font("Dialog", Font.PLAIN, 12));
+		txtSubtotal.setEditable(false);
+		txtSubtotal.setColumns(10);
+		txtSubtotal.setBackground(Color.WHITE);
+		txtSubtotal.setBounds(39, 296, 94, 25);
+		frmBill.getContentPane().add(txtSubtotal);
+		
+		total = new JTextField();
+		total.setText("0");
+		total.setHorizontalAlignment(SwingConstants.RIGHT);
+		total.setFont(new Font("Dialog", Font.PLAIN, 12));
+		total.setEditable(false);
+		total.setColumns(10);
+		total.setBackground(Color.WHITE);
+		total.setBounds(129, 296, 390, 25);
+		frmBill.getContentPane().add(total);
+		
+		tax = new JTextField();
+		tax.setText("0");
+		tax.setHorizontalAlignment(SwingConstants.RIGHT);
+		tax.setFont(new Font("Dialog", Font.PLAIN, 12));
+		tax.setEditable(false);
+		tax.setColumns(10);
+		tax.setBackground(Color.WHITE);
+		tax.setBounds(129, 321, 390, 25);
+		frmBill.getContentPane().add(tax);
 		frmBill.setVisible(true);
 		
 	}
 	public void setTotal()
 	{
-		int Amount = 0;
+		double Amount = 0;
 		int i;
 		int rowCount = table.getRowCount();
 		for(i = 0;i<rowCount;i++)
@@ -179,6 +244,9 @@ public class BillForm {
 			Amount = Amount + (Integer.parseInt(table.getValueAt(i, 3)+"")*Integer.parseInt(table.getValueAt(i, 4)+""));
 		}
 		total.setText(String.valueOf(Amount));
+		tax.setText(new DecimalFormat("##.##").format(Amount*0.05));
+		Amount = (Amount + (Amount*0.05));
+		finaltotal.setText(new DecimalFormat("##.##").format(Amount));
 	}
 	public void AddRow()
 	{
