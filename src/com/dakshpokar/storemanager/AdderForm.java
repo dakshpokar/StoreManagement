@@ -97,7 +97,7 @@ public class AdderForm {
 	private void initialize() throws SQLException {
 		frmAddItems = new JFrame();	
 		frmAddItems.setTitle("Add Items");
-		frmAddItems.setBounds(100, 100, 636, 455);
+		frmAddItems.setBounds(100, 100, 650, 450);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAddItems.addWindowListener(new WindowAdapter() {
 			@Override
@@ -110,6 +110,7 @@ public class AdderForm {
 		frmAddItems.getContentPane().setLayout(null);
 
 		final JComboBox comboBox = new JComboBox();
+		comboBox.setEditable(true);
 		final JTextField txtpnEnterAKeyword = new JTextField();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -162,7 +163,7 @@ public class AdderForm {
 			rs.close();
 			String catsql;
 			comboBox.addItem("All");
-			catsql = "select distinct item_category from itemlist";
+			catsql = "select * from itemcategory";
 			rs3 = stmt.executeQuery(catsql);
 			while(rs3.next())
 			{

@@ -26,6 +26,8 @@ public class ClientDashboard {
 	public JFrame frmDashboard;
 	public static BillForm billForm;
 	public static ShowBills sBForm;
+	public static AddItems addItemsForm;
+	public static ShowItems showItemsForm;
 	Connection conn=null;
 	Statement stmt=null;
 	public int id = 0;
@@ -169,6 +171,17 @@ public class ClientDashboard {
 		frmDashboard.getContentPane().add(lblUsername);
 		lblUsername.setText(ERP.loginForm.getUsername());
 		JButton btnAddItems = new JButton("Add Items");
+		btnAddItems.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					addItemsForm = new AddItems();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				addItemsForm.frame.setVisible(true);
+			}
+		});
 		btnAddItems.setBounds(173, 184, 117, 40);
 		frmDashboard.getContentPane().add(btnAddItems);
 		
@@ -181,6 +194,17 @@ public class ClientDashboard {
 		frmDashboard.getContentPane().add(lblItemRelated);
 		
 		JButton btnShowItems = new JButton("Show Items");
+		btnShowItems.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					showItemsForm = new ShowItems();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				showItemsForm.frame.setVisible(true);
+			}
+		});
 		btnShowItems.setBounds(58, 184, 117, 40);
 		frmDashboard.getContentPane().add(btnShowItems);
 		
