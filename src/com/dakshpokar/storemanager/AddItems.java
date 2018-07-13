@@ -27,6 +27,8 @@ public class AddItems {
 	private JTextField textField_2;
 	Connection conn = null;
 	Statement stmt = null;
+	public boolean add_modify = false;
+	Integer id;
 
 	/**
 	 * Launch the application.
@@ -38,6 +40,11 @@ public class AddItems {
 	 * @throws ClassNotFoundException 
 	 */
 	public AddItems() throws SQLException, ClassNotFoundException {
+		initialize();
+	}
+	public AddItems(boolean val, Integer id) throws ClassNotFoundException, SQLException {
+		add_modify = val;
+		this.id = id;
 		initialize();
 	}
 
@@ -106,8 +113,9 @@ public class AddItems {
 		JLabel lblAddItemsTo = new JLabel("Add Items to Shop:");
 		lblAddItemsTo.setBounds(30, 27, 238, 14);
 		frame.getContentPane().add(lblAddItemsTo);
-		
-		JButton button = new JButton("Add");
+		JButton button;
+		if(add_modify == false) {
+		button = new JButton("Add");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String item_name = textField.getText().toString();
@@ -126,6 +134,27 @@ public class AddItems {
 				
 			}
 		});
+		}
+		else
+		{
+			button = new JButton("Modify");
+			String query = "select * from itemlist where item_id = " + id;
+			ResultSet rs2 = stmt.executeQuery(query);
+			rs2.getRow();
+			rs2.next();
+			textField.setText(rs2.getString(2));
+			comboBox.setSelectedItem(rs2.getString(3));
+			textField_1.setText(rs2.getString(4));
+			textField_2.setText(rs2.getString(5));
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String item_name = textField.getText().toString();
+					String item_category = comboBox.getSelectedItem().toString();
+					Integer price = Integer.parseInt(textField_1.getText().toString());
+					Integer stock = Integer.parseInt(textField_2.getText().toString());
+				}
+			});
+		}
 		button.setFont(new Font("Dialog", Font.PLAIN, 12));
 		button.setBounds(455, 250, 100, 40);
 		frame.getContentPane().add(button);

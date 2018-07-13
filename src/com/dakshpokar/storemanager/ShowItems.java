@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import java.awt.Font;
+import java.awt.Point;
 
 import javax.swing.JComboBox;
 
@@ -25,6 +26,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -121,6 +125,27 @@ public class ShowItems {
 		frame.getContentPane().add(comboBox);
 		
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent mouseEvent) {
+		        JTable table =(JTable) mouseEvent.getSource();
+		        Point point = mouseEvent.getPoint();
+		        int row = table.rowAtPoint(point);
+		        if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+		        	AddItems addItems = null;
+					try {
+			        	Integer id = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
+						addItems = new AddItems(true, id);
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	addItems.frame.setVisible(true);
+		        }
+		    }
+		});
 		table.setBounds(73, 127, 480, 189);
 		JScrollPane scroll=new JScrollPane(table);
 		scroll.setLocation(31, 112);
