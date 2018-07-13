@@ -18,19 +18,14 @@ public class LoginForm {
 	private JFrame frmLogin;
 	private JTextField textField;
 	private JPasswordField passwordField;
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	static final String DB_URL = "jdbc:mysql://localhost/users";
-	static final String USER = "jusername";
-	static final String PASS = "jpassword";
 	private String username;
 	private String password;
 	private int priv;
+	public static DatabaseConnection databaseConn;
 	/**
 	 * Launch the application.
 	 */
 	public static ClientDashboard clientWindow;
-	
-
 	/**
 	 * Create the application.
 	 */
@@ -85,16 +80,30 @@ public class LoginForm {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				check();
+				try {
+					check();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnLogin.setBounds(204, 132, 101, 40);
 		frmLogin.getContentPane().add(btnLogin);
 	}
-	private void check()
+	private void check() throws SQLException, ClassNotFoundException
 	{
-		username = "dakshpokar"; //textField.getText();
-		password = "password"; //passwordField.getText();
+		username = textField.getText();
+		password = passwordField.getText();
+		if(username.equals("")) {
+			username = "dakshpokar";
+		}
+		if(password.equals("")) {
+			password = "password";
+		}
 		if(username.equals(""))
 		{
 			JOptionPane.showMessageDialog(null, "Authorization Failure!");
@@ -108,14 +117,13 @@ public class LoginForm {
 			connect();
 		}
 	}
-	private void connect()
+	private void connect() throws SQLException, ClassNotFoundException
 	{
-		Connection conn = null;
-		Statement stmt = null;
+		Connection conn = DatabaseConnection.getConnection();
+		Statement stmt = conn.createStatement();
 		try {
-			Class.forName(JDBC_DRIVER);
+			
 			System.out.println("Connecting to Database....");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			System.out.println("Creating statement");
 			stmt = conn.createStatement();
 			String sql;

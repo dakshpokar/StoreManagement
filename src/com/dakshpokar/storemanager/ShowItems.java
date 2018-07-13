@@ -44,7 +44,7 @@ public class ShowItems {
 	 * Create the application.
 	 * @throws SQLException 
 	 */
-	public ShowItems() throws SQLException {
+	public ShowItems() throws SQLException, ClassNotFoundException {
 		initialize();
 	}
 
@@ -52,14 +52,14 @@ public class ShowItems {
 	 * Initialize the contents of the frame.
 	 * @throws SQLException 
 	 */
-	private void initialize() throws SQLException {
+	private void initialize() throws SQLException, ClassNotFoundException{
 		frame = new JFrame();
 		frame.setBounds(100, 100, 650, 391);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		String sql;
 		ResultSet rs;
-		conn = LoginForm.clientWindow.conn;
+		conn = DatabaseConnection.getConnection();
 		stmt = conn.createStatement();
 		sql = "select * from itemlist";
 		rs = stmt.executeQuery(sql);

@@ -35,19 +35,21 @@ public class AddItems {
 	/**
 	 * Create the application.
 	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public AddItems() throws SQLException {
+	public AddItems() throws SQLException, ClassNotFoundException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	private void initialize() throws SQLException {
+	private void initialize() throws SQLException, ClassNotFoundException {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 650, 354);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblItemName = new JLabel("Item Name:");
@@ -69,7 +71,7 @@ public class AddItems {
 		comboBox.setBackground(Color.WHITE);
 		comboBox.setBounds(204, 126, 351, 40);
 		
-		conn = LoginForm.clientWindow.conn;
+		conn = DatabaseConnection.getConnection();
 		stmt = conn.createStatement();
 		final ResultSet rs;
 		String catsql;

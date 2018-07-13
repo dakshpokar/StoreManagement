@@ -59,24 +59,8 @@ public class ClientDashboard {
 		frmDashboard.setBounds(100, 100, 360, 300);
 		//frmDashboard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDashboard.getContentPane().setLayout(null);
-		try {
-			Class.forName(LoginForm.JDBC_DRIVER);
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			conn = DriverManager.getConnection(LoginForm.DB_URL, LoginForm.USER, LoginForm.PASS);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			stmt = conn.createStatement();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		conn = DatabaseConnection.conn;
+		stmt = DatabaseConnection.stmt;
 		
 		JButton btnNewButton = new JButton("New Bill");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -178,6 +162,9 @@ public class ClientDashboard {
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 				addItemsForm.frame.setVisible(true);
 			}
@@ -199,6 +186,9 @@ public class ClientDashboard {
 				try {
 					showItemsForm = new ShowItems();
 				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
