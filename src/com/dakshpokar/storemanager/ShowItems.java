@@ -43,6 +43,7 @@ public class ShowItems {
 	Statement stmt;
 	Connection conn;
 	AddItems addItemsForm = null;
+	Integer priv = ERP.loginForm.getpriv();
 	/**
 	 * Launch the application.
 	 */
@@ -69,7 +70,13 @@ public class ShowItems {
 	}
 	private void initialize() throws SQLException, ClassNotFoundException{
 		frame = new JFrame();
+		if(priv>=2) {
 		frame.setBounds(100, 100, 707, 391);
+		}
+		else
+		{
+			frame.setBounds(100, 100, 550, 391);
+		}
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		String sql;
@@ -130,6 +137,7 @@ public class ShowItems {
 		frame.getContentPane().add(comboBox);
 		
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		if(priv>=2) {
 		table.addMouseListener(new MouseAdapter() {
 		    public void mousePressed(MouseEvent mouseEvent) {
 		        JTable table =(JTable) mouseEvent.getSource();
@@ -151,6 +159,7 @@ public class ShowItems {
 		        }
 		    }
 		});
+		}
 		table.setBounds(73, 127, 480, 189);
 		JScrollPane scroll=new JScrollPane(table);
 		scroll.setLocation(31, 112);
@@ -201,7 +210,7 @@ public class ShowItems {
 		label_1 = new JLabel("Enter the item to be searched:");
 		label_1.setBounds(31, 11, 188, 14);
 		frame.getContentPane().add(label_1);
-		
+		if(priv >= 2) {
 		JButton button = new JButton("Remove Item");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -247,5 +256,6 @@ public class ShowItems {
 		});
 		button_1.setBounds(531, 35, 137, 25);
 		frame.getContentPane().add(button_1);
+		}
 	}
 }
