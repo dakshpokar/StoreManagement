@@ -150,8 +150,16 @@ public class AddItems {
 				public void actionPerformed(ActionEvent arg0) {
 					String item_name = textField.getText().toString();
 					String item_category = comboBox.getSelectedItem().toString();
-					Integer price = Integer.parseInt(textField_1.getText().toString());
-					Integer stock = Integer.parseInt(textField_2.getText().toString());
+					Integer item_price = Integer.parseInt(textField_1.getText().toString());
+					Integer item_stock = Integer.parseInt(textField_2.getText().toString());
+					String query;
+					query = "update itemlist set item_name = \"" + item_name + "\"," + "item_category = \"" + item_category + "\"," + "item_price = " + item_price + ", item_stock = " + item_stock + " where item_id = " + id;
+					try {
+						stmt.execute(query);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 		}
