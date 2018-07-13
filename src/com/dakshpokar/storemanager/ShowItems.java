@@ -62,6 +62,11 @@ public class ShowItems {
 	 * Initialize the contents of the frame.
 	 * @throws SQLException 
 	 */
+	public void updateTable() throws SQLException {
+		String sql = "select * from itemlist";
+		ResultSet rs = stmt.executeQuery(sql);
+		table.setModel(AdderForm.buildTableModel(rs));
+	}
 	private void initialize() throws SQLException, ClassNotFoundException{
 		frame = new JFrame();
 		frame.setBounds(100, 100, 707, 391);

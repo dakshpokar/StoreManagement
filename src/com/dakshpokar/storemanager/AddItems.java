@@ -160,6 +160,13 @@ public class AddItems {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					frame.setVisible(false);
+					try {
+						ClientDashboard.showItemsForm.updateTable();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 		}
