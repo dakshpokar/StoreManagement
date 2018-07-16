@@ -10,6 +10,8 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.net.*;
 import java.awt.event.ActionEvent;
 import java.sql.*;
 
@@ -22,6 +24,8 @@ public class LoginForm {
 	private String password;
 	private int priv;
 	public static DatabaseConnection databaseConn;
+	
+	 
 	/**
 	 * Launch the application.
 	 */
@@ -93,6 +97,7 @@ public class LoginForm {
 		});
 		btnLogin.setBounds(204, 132, 101, 40);
 		frmLogin.getContentPane().add(btnLogin);
+		
 	}
 	private void check() throws SQLException, ClassNotFoundException
 	{
@@ -142,19 +147,6 @@ public class LoginForm {
 			{
 				JOptionPane.showMessageDialog(null, "Authorization Failure!");
 			}
-			
-			/*while(rs.next()){
-		         //Retrieve by column name
-		         int id  = rs.getInt("id");
-		         String first = rs.getString("username");
-		         String last = rs.getString("password");
-
-		         //Display values
-		         System.out.print("ID: " + id);
-		         System.out.print(", First: " + first);
-		         System.out.println(", Last: " + last);
-		      }*/
-			
 		}
 		catch(SQLException se)
 		{
@@ -179,5 +171,4 @@ public class LoginForm {
 		      }//end finally try
 		   }//end try
 	}
-
 }

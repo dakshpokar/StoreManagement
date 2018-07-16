@@ -51,7 +51,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
 public class AdderForm {
-
+	
 	private JFrame frmAddItems;
 	private JTable table;
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  

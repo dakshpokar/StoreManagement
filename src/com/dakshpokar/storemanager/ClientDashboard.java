@@ -10,6 +10,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.*;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
@@ -31,7 +37,10 @@ public class ClientDashboard {
 	Connection conn=null;
 	Statement stmt=null;
 	public int id = 0;
-
+	Socket socket = null;
+	DataInputStream input;
+	DataOutputStream output;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -56,7 +65,13 @@ public class ClientDashboard {
 	private void initialize() throws SQLException {
 		frmDashboard = new JFrame();
 		frmDashboard.setTitle("Dashboard");
-		frmDashboard.setBounds(100, 100, 360, 300);
+		if(ERP.loginForm.getpriv()>=2) {
+			frmDashboard.setBounds(100, 100, 360, 380);
+		}
+		else {
+			joinServer();
+			frmDashboard.setBounds(100, 100, 360, 300);
+		}
 		//frmDashboard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDashboard.getContentPane().setLayout(null);
 		conn = DatabaseConnection.conn;
@@ -66,65 +81,6 @@ public class ClientDashboard {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				
-				//Create bill in Database
-				/**
-				
-				String rowno;
-				rowno = "select * from bills";
-				ResultSet rs1 = null;
-				try {
-					rs1 = stmt.executeQuery(rowno);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				try {
-					if(rs1.last())
-					{
-						try {
-							id = Integer.parseInt(rs1.getString(1)) + 1;
-						} catch (NumberFormatException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-					else
-					{
-						id = 0;
-					}
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try {
-					rs1.close();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				String create;
-				create = "create table bill"+id+"(item_id int, item_name varchar(255), item_category varchar(255), item_price bigint, item_quantity int)";
-				try {
-					stmt.execute(create);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				String insertTable;
-				insertTable = "insert into bills values("+id+", 'bill"+id+"', 0)";
-				try {
-					stmt.execute(insertTable);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				**/
 				
 				billForm = new BillForm(id);
 
@@ -170,7 +126,7 @@ public class ClientDashboard {
 			}
 		});
 		btnAddItems.setBounds(173, 184, 117, 40);
-		frmDashboard.getContentPane().add(btnAddItems);
+		
 		
 		JLabel lblBillRelated = new JLabel("Bill Related:");
 		lblBillRelated.setBounds(58, 65, 188, 14);
@@ -220,14 +176,29 @@ public class ClientDashboard {
 		lblLogout.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblLogout.setBounds(242, 31, 75, 20);
 		frmDashboard.getContentPane().add(lblLogout);
-		if(ERP.loginForm.getpriv() < 2)
-		{
-			btnAddItems.setVisible(false);
-		}
-		else
-		{
-			btnAddItems.setVisible(true);
-		}
+		if(ERP.loginForm.getpriv() >=2) {
+		JLabel lblServerRelated = new JLabel("Server Related:");
+		lblServerRelated.setBounds(58, 245, 188, 14);
+		frmDashboard.getContentPane().add(lblServerRelated);
 		
+		JButton btnStartServer = new JButton("Start Server");
+		btnStartServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					new Thread(new Server()).start();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		btnStartServer.setBounds(58, 270, 117, 40);
+		frmDashboard.getContentPane().add(btnStartServer);
+		frmDashboard.getContentPane().add(btnAddItems);
+		}		
+	}
+	private void joinServer() {
+		new Thread(new ClientConnection()).start();
 	}
 }
+
