@@ -12,26 +12,33 @@ public class ServerConnection implements Runnable{
 		this.server = server;
 	}
 	public void run() {
+		Query x = null;
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		while(true) {
-			try {
-				while(ois.available() == 0) {
-					try {
-						Thread.sleep(1);
-					}
-					catch(InterruptedException e)
-					{
-						e.printStackTrace();
-					}
+		try {
+			while(ois.available() == 0) {
+				try {
+					Thread.sleep(1);
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
+				catch(InterruptedException e)
+				{
+					e.printStackTrace();
+				}
 			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+		try {
+			x = (Query)ois.readObject();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(x.getQuery());
 		
 	}
 }

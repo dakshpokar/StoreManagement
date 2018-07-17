@@ -79,8 +79,9 @@ public class ClientDashboard {
 		JButton btnNewButton = new JButton("New Bill");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-
+				if(ERP.loginForm.getpriv() <= 2) {
+					clientConnection.sendQuery(new Query("select * from bills", 0));
+				}
 			}
 		});
 		btnNewButton.setBounds(58, 90, 117, 40);

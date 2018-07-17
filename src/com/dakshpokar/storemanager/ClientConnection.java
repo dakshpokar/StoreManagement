@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 public class ClientConnection implements Runnable{
 	private Socket socket = null;
 	private ObjectOutputStream oos;
-	private String query;
+	private Query query;
 	public ClientConnection() {
 
 	}
@@ -17,6 +17,7 @@ public class ClientConnection implements Runnable{
 			socket = new Socket("127.0.0.1", 3160);
 			System.out.println("Connected to Server!");
 			oos = new ObjectOutputStream(socket.getOutputStream());
+			System.out.println("Connected Output stream");
 		}
 		catch(UnknownHostException u){
 			System.out.println(u);
@@ -25,7 +26,7 @@ public class ClientConnection implements Runnable{
 			System.out.println(i);
 		}
 	}
-	public void sendString(String query) {
+	public void sendQuery(Query query) {
 		this.query = query;
 		try {
 			oos.writeObject(query);
