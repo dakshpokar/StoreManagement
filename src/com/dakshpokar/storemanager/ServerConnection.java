@@ -18,19 +18,7 @@ public class ServerConnection implements Runnable{
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		try {
-			while(ois.available() == 0) {
-				try {
-					Thread.sleep(1);
-				}
-				catch(InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		
 		try {
 			x = (Query)ois.readObject();
 		} catch (ClassNotFoundException e) {
