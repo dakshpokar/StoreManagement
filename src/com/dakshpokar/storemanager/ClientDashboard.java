@@ -37,9 +37,8 @@ public class ClientDashboard {
 	Connection conn=null;
 	Statement stmt=null;
 	public int id = 0;
-	Socket socket = null;
-	DataInputStream input;
-	DataOutputStream output;
+	public ClientConnection clientConnection;
+	Statement billstmt;
 	
 	/**
 	 * Launch the application.
@@ -81,8 +80,6 @@ public class ClientDashboard {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				
-				billForm = new BillForm(id);
 
 			}
 		});
@@ -193,12 +190,14 @@ public class ClientDashboard {
 			}
 		});
 		btnStartServer.setBounds(58, 270, 117, 40);
+		
 		frmDashboard.getContentPane().add(btnStartServer);
 		frmDashboard.getContentPane().add(btnAddItems);
 		}		
 	}
 	private void joinServer() {
-		new Thread(new ClientConnection()).start();
+		clientConnection = new ClientConnection();
+		new Thread(clientConnection).start();
 	}
 }
 

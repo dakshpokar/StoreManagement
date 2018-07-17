@@ -1,24 +1,22 @@
 package com.dakshpokar.storemanager;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
+
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ClientConnection implements Runnable{
 	private Socket socket = null;
-	private DataInputStream input = null;
-	private DataOutputStream output = null;
+	private ObjectOutputStream oos;
+	private String query;
 	public ClientConnection() {
 
 	}
 	public void run() {
 		try {
 			socket = new Socket("127.0.0.1", 3160);
-			System.out.println("Connected to Client!");
-			input = new DataInputStream(System.in);
-			output = new DataOutputStream(socket.getOutputStream());
+			System.out.println("Connected to Server!");
+			oos = new ObjectOutputStream(socket.getOutputStream());
 		}
 		catch(UnknownHostException u){
 			System.out.println(u);
@@ -26,28 +24,14 @@ public class ClientConnection implements Runnable{
 		catch(IOException i){
 			System.out.println(i);
 		}
-		
-		String line = "";
-		
-		while(!line.equals("Over")){
-			try{
-				line = input.readLine();
-				output.writeUTF(line);
-			}
-			catch(IOException i){
-				System.out.println(i);
-			}
+	}
+	public void sendString(String query) {
+		this.query = query;
+		try {
+			oos.writeObject(query);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		try
-        {
-            input.close();
-            output.close();
-            socket.close();
-        }
-        catch(IOException i)
-        {
-            System.out.println(i);
-        }		
 	}
 
 }
