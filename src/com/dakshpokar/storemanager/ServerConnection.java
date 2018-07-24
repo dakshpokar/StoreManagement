@@ -2,6 +2,7 @@ package com.dakshpokar.storemanager;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -16,11 +17,16 @@ public class ServerConnection implements Runnable{
 		this.server = server;
 	}
 	public void run() {
-		while(true) {
+		while(!socket.isClosed()) {
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			try {
+				socket.close();
+				break;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		Query x = null;
 		try {

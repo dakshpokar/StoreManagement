@@ -170,6 +170,9 @@ public class ClientDashboard {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				ERP.loginForm.returnFrame().setVisible(true);
+				if(ERP.loginForm.getpriv() < 2) {
+					clientConnection.close();
+				}
 				frmDashboard.setVisible(false);
 				ERP.loginForm.reset();
 			}
