@@ -94,7 +94,7 @@ public class ClientDashboard {
 					String insertTable;
 					insertTable = "insert into bills values("+id+","+"'bill"+id+"', 0, 'None', "+LoginForm.getUserID()+")";
 					clientConnection.sendQuery(new Query(insertTable, 1, 1));
-					BillForm billForm = new BillForm(id);
+					billForm = new BillForm(id);
 					billForm.frmBill.setVisible(true);
 				}
 			}

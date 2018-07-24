@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import javax.swing.JProgressBar;
 import javax.swing.table.DefaultTableModel;
 
 public class ClientConnection implements Runnable{
@@ -52,9 +53,13 @@ public class ClientConnection implements Runnable{
 		return null;
 	}
 	public DefaultTableModel builderFromSender(Query query) {
+		AdderForm.progressBar = new JProgressBar();
+		AdderForm.progressBar.setValue(10);
 		DefaultTableModel model = null;
 		VectorWrapper vw = sendQuery(query);
+		AdderForm.progressBar.setValue(30);
 		model = new DefaultTableModel(vw.getData(),vw.getColumnNames());
+		AdderForm.progressBar.setValue(100);
 		return model;
 	}
 	public VectorWrapper receiveVector() throws IOException, ClassNotFoundException {
