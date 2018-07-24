@@ -71,6 +71,7 @@ public class BillForm {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Discard this Bill?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 					System.out.println("Bill Deleted!");
+					
 					frmBill.dispose();
 				}
 				else

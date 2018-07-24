@@ -80,7 +80,7 @@ public class ClientDashboard {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(ERP.loginForm.getpriv() < 2) {
-					Vector<Vector<Object>> data = clientConnection.sendQuery(new Query("select max(bill_id) from bills", 0));
+					Vector<Vector<Object>> data = clientConnection.sendQuery(new Query("select max(bill_id) from bills", 0, 1));
 					Integer id = (Integer) data.get(0).get(0);
 					if(id == null) {
 						id = 1;
@@ -90,26 +90,10 @@ public class ClientDashboard {
 					}
 					String create;
 					create = "create table bill"+id+"(item_id int, item_name varchar(255), item_category varchar(255), item_price bigint, item_quantity int)";
-					try {
-						DatabaseConnection.getBillStatement().execute(create);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ClassNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					clientConnection.sendQuery(new Query(create, 1, 1));
 					String insertTable;
 					insertTable = "insert into bills values("+id+","+"'bill"+id+"', 0, 'None', "+LoginForm.getUserID()+")";
-					try {
-						DatabaseConnection.getBillStatement().execute(insertTable);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ClassNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					clientConnection.sendQuery(new Query(insertTable, 1, 1));
 					BillForm billForm = new BillForm(id);
 					billForm.frmBill.setVisible(true);
 				}

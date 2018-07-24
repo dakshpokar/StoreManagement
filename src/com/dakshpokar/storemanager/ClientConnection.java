@@ -41,9 +41,11 @@ public class ClientConnection implements Runnable{
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		else {
+			return null;
 		}
 		return null;
 	}
@@ -58,7 +60,6 @@ public class ClientConnection implements Runnable{
 			ois.close();
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

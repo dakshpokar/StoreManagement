@@ -7,10 +7,12 @@ public class Query implements Serializable{
 	private static final long serialVersionUID = 1533489866497387180L;
 	private String Query;
 	private int type;
+	private int db;
 	
-	public Query(String query, int type) {
+	public Query(String query, int type, int db) {
 		Query = query;
 		this.type = type;
+		this.db = db;
 	}
 	public String getQuery() {
 		return Query;

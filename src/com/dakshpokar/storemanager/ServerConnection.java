@@ -36,36 +36,45 @@ public class ServerConnection implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try {
-			oos = new ObjectOutputStream(socket.getOutputStream());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if(x.getType() == 0) {
+			try {
+				oos = new ObjectOutputStream(socket.getOutputStream());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			ResultSet rs = null;
+			
+			try {
+					rs = DatabaseConnection.getBillStatement().executeQuery(x.getQuery());
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			SerializedVector sv = null;
+			try {
+				sv = new SerializedVector(ClientDashboard.getVector(rs));
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				oos.writeObject(sv);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		ResultSet rs = null;
+		else {
+			try {
+				DatabaseConnection.getBillStatement().execute(x.getQuery());
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		}
 		
-		try {
-			rs = DatabaseConnection.getBillStatement().executeQuery(x.getQuery());
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		SerializedVector sv = null;
-		try {
-			sv = new SerializedVector(ClientDashboard.getVector(rs));
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			oos.writeObject(sv);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
 	}
 }
