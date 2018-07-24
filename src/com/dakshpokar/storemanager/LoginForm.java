@@ -106,6 +106,9 @@ public class LoginForm {
 		if(username.equals("")) {
 			username = "dakshpokar";
 		}
+		if(username.equals("a")) {
+			username = "aniketkotalwar";
+		}
 		if(password.equals("")) {
 			password = "password";
 		}

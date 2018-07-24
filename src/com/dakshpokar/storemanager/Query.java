@@ -15,6 +15,8 @@ public class Query implements Serializable{
 	public String getQuery() {
 		return Query;
 	}
-	
+	public int getType() {
+		return type;
+	}
 	
 }

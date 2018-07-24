@@ -1,0 +1,62 @@
+try {
+					billstmt = DatabaseConnection.getBillStatement();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				String rowno;	
+				rowno = "select * from bills";	
+				ResultSet rs1 = null;	
+				try {	
+				rs1 = billstmt.executeQuery(rowno);	
+				} catch (SQLException e1) {	
+					e1.printStackTrace();	
+				}
+				try {	
+										if(rs1.last())	
+										{	
+											try {	
+												id = Integer.parseInt(rs1.getString(1)) + 1;	
+												System.out.println(id);
+											} catch (NumberFormatException e1) {	
+												// TODO Auto-generated catch block	
+												e1.printStackTrace();	
+											} catch (SQLException e1) {	
+												// TODO Auto-generated catch block	
+												e1.printStackTrace();	
+											}	
+										}	
+										else	
+										{	
+											id = 0;	
+									}	
+									} catch (SQLException e1) {	
+										// TODO Auto-generated catch block	
+										e1.printStackTrace();	
+				}
+				try {	
+									rs1.close();	
+								} catch (SQLException e1) {	
+										// TODO Auto-generated catch block	
+										e1.printStackTrace();	
+									}
+				String create;	
+								create = "create table bill"+id+"(item_id int, item_name varchar(255), item_category varchar(255), item_price bigint, item_quantity int)";	
+								try {	
+									billstmt.execute(create);	
+								} catch (SQLException e1) {	
+									// TODO Auto-generated catch block	
+									e1.printStackTrace();	
+								}	
+								String insertTable;	
+								insertTable = "insert into bills values("+id+", 'bill"+id+"',0, NULL)";	
+								try {	
+									billstmt.execute(insertTable);	
+								} catch (SQLException e1) {	
+									// TODO Auto-generated catch block	
+									e1.printStackTrace();	
+								}
+				billForm = new BillForm(id);

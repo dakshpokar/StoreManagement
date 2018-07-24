@@ -17,7 +17,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.sql.*;
-import java.sql.SQLException;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -79,8 +79,12 @@ public class ClientDashboard {
 		JButton btnNewButton = new JButton("New Bill");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(ERP.loginForm.getpriv() <= 2) {
-					clientConnection.sendQuery(new Query("select * from bills", 0));
+				if(ERP.loginForm.getpriv() < 2) {
+					Vector<Vector<Object>> data = clientConnection.sendQuery(new Query("select * from bills", 0));
+					if(data == null) {
+						System.out.println("data is null");
+					}
+					System.out.println((data.get(0)).get(1));
 				}
 			}
 		});
@@ -199,6 +203,25 @@ public class ClientDashboard {
 	private void joinServer() {
 		clientConnection = new ClientConnection();
 		new Thread(clientConnection).start();
+	}
+	
+	public static Vector<Vector<Object>> getVector(ResultSet rs)
+	        throws SQLException {
+	    java.sql.ResultSetMetaData metaData = rs.getMetaData();
+	    Vector<String> columnNames = new Vector<String>();
+	    int columnCount = metaData.getColumnCount();	    
+	    for (int column = 1; column <= columnCount; column++) {
+	        columnNames.add(metaData.getColumnName(column));
+	    }
+	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+	    while (rs.next()) {
+	        Vector<Object> vector = new Vector<Object>();
+	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+	            vector.add(rs.getObject(columnIndex));
+	        }
+	        data.add(vector);
+	    }
+	    return data;
 	}
 }
 

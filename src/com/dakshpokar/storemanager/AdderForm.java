@@ -365,7 +365,6 @@ public class AdderForm {
 	    
 
 	    return new DefaultTableModel(data, columnNames);
-
 	}
 	
 }
