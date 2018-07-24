@@ -20,5 +20,7 @@ public class Query implements Serializable{
 	public int getType() {
 		return type;
 	}
-	
+	public int getDb() {
+		return db;
+	}
 }

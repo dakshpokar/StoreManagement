@@ -71,7 +71,8 @@ public class BillForm {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Discard this Bill?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 					System.out.println("Bill Deleted!");
-					
+					ClientDashboard.clientConnection.sendQuery(new Query("delete from bills where bill_id="+id, 1,1));
+					ClientDashboard.clientConnection.sendQuery(new Query("drop table bill"+id,1,1));
 					frmBill.dispose();
 				}
 				else

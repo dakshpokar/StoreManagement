@@ -45,7 +45,12 @@ public class ServerConnection implements Runnable{
 			ResultSet rs = null;
 			
 			try {
+				if(x.getDb() == 0) {
+					rs = DatabaseConnection.getUsersStatement().executeQuery(x.getQuery());
+				}
+				else if(x.getDb() == 1) {
 					rs = DatabaseConnection.getBillStatement().executeQuery(x.getQuery());
+				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {
@@ -65,7 +70,12 @@ public class ServerConnection implements Runnable{
 		}
 		else {
 			try {
-				DatabaseConnection.getBillStatement().execute(x.getQuery());
+				if(x.getDb() == 0) {
+					DatabaseConnection.getUsersStatement().execute(x.getQuery());
+				}
+				else if(x.getDb() == 1) {
+					DatabaseConnection.getBillStatement().execute(x.getQuery());
+				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

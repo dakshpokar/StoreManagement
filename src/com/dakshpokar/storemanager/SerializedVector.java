@@ -4,12 +4,12 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 public class SerializedVector implements Serializable{
-	private Vector<Vector<Object>> x;
+	private VectorWrapper x;
 	private static final long serialVersionUID = -8071914112278139481L;
-	public Vector<Vector<Object>> getVector() {
+	public VectorWrapper getVector() {
 		return x;
 	}
-	public SerializedVector(Vector<Vector<Object>> x){
+	public SerializedVector(VectorWrapper x){
 		this.x = x;
 	}
 }

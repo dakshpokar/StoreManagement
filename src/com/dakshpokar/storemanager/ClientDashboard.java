@@ -37,7 +37,7 @@ public class ClientDashboard {
 	Connection conn=null;
 	Statement stmt=null;
 	public int id = 0;
-	public ClientConnection clientConnection;
+	public static ClientConnection clientConnection;
 	Statement billstmt;
 	
 	/**
@@ -80,7 +80,7 @@ public class ClientDashboard {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(ERP.loginForm.getpriv() < 2) {
-					Vector<Vector<Object>> data = clientConnection.sendQuery(new Query("select max(bill_id) from bills", 0, 1));
+					Vector<Vector<Object>> data = clientConnection.sendQuery(new Query("select max(bill_id) from bills", 0, 1)).getData();
 					Integer id = (Integer) data.get(0).get(0);
 					if(id == null) {
 						id = 1;
@@ -219,7 +219,7 @@ public class ClientDashboard {
 		new Thread(clientConnection).start();
 	}
 	
-	public static Vector<Vector<Object>> getVector(ResultSet rs)
+	public static VectorWrapper getVector(ResultSet rs)
 	        throws SQLException {
 	    java.sql.ResultSetMetaData metaData = rs.getMetaData();
 	    Vector<String> columnNames = new Vector<String>();
@@ -235,7 +235,7 @@ public class ClientDashboard {
 	        }
 	        data.add(vector);
 	    }
-	    return data;
+	    return new VectorWrapper(data, columnNames);
 	}
 }
 

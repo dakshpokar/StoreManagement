@@ -7,6 +7,8 @@ import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import javax.swing.table.DefaultTableModel;
+
 public class ClientConnection implements Runnable{
 	private Socket socket = null;
 	private ObjectOutputStream oos;
@@ -27,7 +29,7 @@ public class ClientConnection implements Runnable{
 			System.out.println(i);
 		}
 	}
-	public Vector<Vector<Object>> sendQuery(Query query) {
+	public VectorWrapper sendQuery(Query query) {
 		this.query = query;
 		try {
 			oos = new ObjectOutputStream(socket.getOutputStream());
@@ -49,7 +51,13 @@ public class ClientConnection implements Runnable{
 		}
 		return null;
 	}
-	public Vector<Vector<Object>> receiveVector() throws IOException, ClassNotFoundException {
+	public DefaultTableModel builderFromSender(Query query) {
+		DefaultTableModel model = null;
+		VectorWrapper vw = sendQuery(query);
+		model = new DefaultTableModel(vw.getData(),vw.getColumnNames());
+		return model;
+	}
+	public VectorWrapper receiveVector() throws IOException, ClassNotFoundException {
 		ois = new ObjectInputStream(socket.getInputStream());
 		SerializedVector x = (SerializedVector)ois.readObject();
 		return x.getVector();

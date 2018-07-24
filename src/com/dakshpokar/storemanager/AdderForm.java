@@ -69,18 +69,6 @@ public class AdderForm {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AdderForm window = new AdderForm();
-					window.frmAddItems.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -119,24 +107,14 @@ public class AdderForm {
 				String s;
 				if(cat.equals("All"))
 				{
-					s= "select * from itemlist where item_name like '" + text + "%'";
+					s = "select * from itemlist where item_name like '" + text + "%'";
 				}
 				else
 				{
 					s = "select * from itemlist where item_name like '" + text + "%'" + " and item_category='"+cat+"'";
 				}
-				try {
-					rs2 = stmt.executeQuery(s);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				try {
-					table.setModel(buildTableModel(rs2));
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				
+				table.setModel(ClientDashboard.clientConnection.builderFromSender((new Query(s, 0, 0))));
 			}
 		});
 		comboBox.setFont(new Font("Dialog", Font.PLAIN, 18));
@@ -183,18 +161,8 @@ public class AdderForm {
 					else
 					{
 						s = "select * from itemlist where item_name like '" + text + "%'" + " and item_category='"+cat+"'";
-					}try {
-						rs2 = stmt.executeQuery(s);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
-					try {
-						table.setModel(buildTableModel(rs2));
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					table.setModel(ClientDashboard.clientConnection.builderFromSender((new Query(s, 0, 0))));
 				}
 				
 			});

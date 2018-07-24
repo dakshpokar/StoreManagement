@@ -20,6 +20,12 @@ public class DatabaseConnection {
 		conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		return conn;
 	}
+	public static Statement getUsersStatement() throws SQLException, ClassNotFoundException {
+		Class.forName(JDBC_DRIVER);
+		conn = DriverManager.getConnection(DB_URL, USER, PASS);
+		stmt = conn.createStatement();
+		return stmt;
+	}
 	public static Statement getBillStatement() throws SQLException, ClassNotFoundException {
 		Class.forName(JDBC_DRIVER);
 		billconn = DriverManager.getConnection(DB_URL_BILLS, USER, PASS);
