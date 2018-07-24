@@ -19,8 +19,6 @@ public class ClientConnection implements Runnable{
 		try {
 			socket = new Socket("127.0.0.1", 3160);
 			System.out.println("Connected to Server!");
-			oos = new ObjectOutputStream(socket.getOutputStream());
-			System.out.println("Connected Output stream");
 		}
 		catch(UnknownHostException u){
 			System.out.println(u);
@@ -32,6 +30,7 @@ public class ClientConnection implements Runnable{
 	public Vector<Vector<Object>> sendQuery(Query query) {
 		this.query = query;
 		try {
+			oos = new ObjectOutputStream(socket.getOutputStream());
 			oos.writeObject(query);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -52,5 +51,15 @@ public class ClientConnection implements Runnable{
 		ois = new ObjectInputStream(socket.getInputStream());
 		SerializedVector x = (SerializedVector)ois.readObject();
 		return x.getVector();
+	}
+	public void close() {
+		try {
+			oos.close();
+			ois.close();
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

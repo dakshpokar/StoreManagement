@@ -16,6 +16,7 @@ public class ServerConnection implements Runnable{
 		this.server = server;
 	}
 	public void run() {
+		while(true) {
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e1) {
@@ -58,6 +59,7 @@ public class ServerConnection implements Runnable{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
 		}
 	}
 }
