@@ -19,6 +19,7 @@ public class Server implements Runnable{
 				Socket s = ss.accept();
 				ServerConnection sc = new ServerConnection(s, this);
 				new Thread(sc).start();
+				
 				System.out.println("Connection established: " + s.getInetAddress());
 				connections.add(sc);
 			}

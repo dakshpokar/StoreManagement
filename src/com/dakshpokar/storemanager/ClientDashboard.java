@@ -17,7 +17,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.sql.*;
-import java.sql.SQLException;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -37,9 +37,8 @@ public class ClientDashboard {
 	Connection conn=null;
 	Statement stmt=null;
 	public int id = 0;
-	Socket socket = null;
-	DataInputStream input;
-	DataOutputStream output;
+	public static ClientConnection clientConnection;
+	Statement billstmt;
 	
 	/**
 	 * Launch the application.
@@ -80,10 +79,24 @@ public class ClientDashboard {
 		JButton btnNewButton = new JButton("New Bill");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				billForm = new BillForm(id);
-
+				if(ERP.loginForm.getpriv() < 2) {
+					Vector<Vector<Object>> data = clientConnection.sendQuery(new Query("select max(bill_id) from bills", 0, 1)).getData();
+					Integer id = (Integer) data.get(0).get(0);
+					if(id == null) {
+						id = 1;
+					}
+					else{
+						id = (Integer)(data.get(0)).get(0) + 1;
+					}
+					String create;
+					create = "create table bill"+id+"(item_id int, item_name varchar(255), item_category varchar(255), item_price bigint, item_quantity int)";
+					clientConnection.sendQuery(new Query(create, 1, 1));
+					String insertTable;
+					insertTable = "insert into bills values("+id+","+"'bill"+id+"', 0, 'None', "+LoginForm.getUserID()+")";
+					clientConnection.sendQuery(new Query(insertTable, 1, 1));
+					billForm = new BillForm(id);
+					billForm.frmBill.setVisible(true);
+				}
 			}
 		});
 		btnNewButton.setBounds(58, 90, 117, 40);
@@ -168,6 +181,9 @@ public class ClientDashboard {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				ERP.loginForm.returnFrame().setVisible(true);
+				if(ERP.loginForm.getpriv() < 2) {
+					clientConnection.close();
+				}
 				frmDashboard.setVisible(false);
 				ERP.loginForm.reset();
 			}
@@ -193,12 +209,33 @@ public class ClientDashboard {
 			}
 		});
 		btnStartServer.setBounds(58, 270, 117, 40);
+		
 		frmDashboard.getContentPane().add(btnStartServer);
 		frmDashboard.getContentPane().add(btnAddItems);
 		}		
 	}
 	private void joinServer() {
-		new Thread(new ClientConnection()).start();
+		clientConnection = new ClientConnection();
+		new Thread(clientConnection).start();
+	}
+	
+	public static VectorWrapper getVector(ResultSet rs)
+	        throws SQLException {
+	    java.sql.ResultSetMetaData metaData = rs.getMetaData();
+	    Vector<String> columnNames = new Vector<String>();
+	    int columnCount = metaData.getColumnCount();	    
+	    for (int column = 1; column <= columnCount; column++) {
+	        columnNames.add(metaData.getColumnName(column));
+	    }
+	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+	    while (rs.next()) {
+	        Vector<Object> vector = new Vector<Object>();
+	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+	            vector.add(rs.getObject(columnIndex));
+	        }
+	        data.add(vector);
+	    }
+	    return new VectorWrapper(data, columnNames);
 	}
 }
 

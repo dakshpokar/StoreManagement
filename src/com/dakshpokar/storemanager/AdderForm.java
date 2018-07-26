@@ -49,6 +49,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.JComboBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.JProgressBar;
 
 public class AdderForm {
 	
@@ -63,24 +64,13 @@ public class AdderForm {
 	ResultSet rs3 = null;
 	Statement stmt = null;
 	Connection conn = null;
+	public static JProgressBar progressBar;
 	public static boolean trueness = false;
 	public static String array[];
 	public JTextField Quantity;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AdderForm window = new AdderForm();
-					window.frmAddItems.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -97,7 +87,7 @@ public class AdderForm {
 	private void initialize() throws SQLException {
 		frmAddItems = new JFrame();	
 		frmAddItems.setTitle("Add Items");
-		frmAddItems.setBounds(100, 100, 650, 450);
+		frmAddItems.setBounds(100, 100, 650, 484);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAddItems.addWindowListener(new WindowAdapter() {
 			@Override
@@ -119,24 +109,14 @@ public class AdderForm {
 				String s;
 				if(cat.equals("All"))
 				{
-					s= "select * from itemlist where item_name like '" + text + "%'";
+					s = "select * from itemlist where item_name like '" + text + "%'";
 				}
 				else
 				{
 					s = "select * from itemlist where item_name like '" + text + "%'" + " and item_category='"+cat+"'";
 				}
-				try {
-					rs2 = stmt.executeQuery(s);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				try {
-					table.setModel(buildTableModel(rs2));
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				
+				table.setModel(ClientDashboard.clientConnection.builderFromSender((new Query(s, 0, 0))));
 			}
 		});
 		comboBox.setFont(new Font("Dialog", Font.PLAIN, 18));
@@ -183,18 +163,8 @@ public class AdderForm {
 					else
 					{
 						s = "select * from itemlist where item_name like '" + text + "%'" + " and item_category='"+cat+"'";
-					}try {
-						rs2 = stmt.executeQuery(s);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
-					try {
-						table.setModel(buildTableModel(rs2));
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					table.setModel(ClientDashboard.clientConnection.builderFromSender((new Query(s, 0, 0))));
 				}
 				
 			});
@@ -211,7 +181,7 @@ public class AdderForm {
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setBounds(73, 127, 480, 189);
 			JScrollPane scroll=new JScrollPane(table);
-			scroll.setLocation(73, 127);
+			scroll.setLocation(73, 153);
 			scroll.setSize(480, 189);
 			scroll.setViewportBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			
@@ -250,7 +220,7 @@ public class AdderForm {
 				}
 			});
 			button.setFont(new Font("Tahoma", Font.PLAIN, 17));
-			button.setBounds(73, 346, 52, 40);
+			button.setBounds(73, 372, 52, 40);
 			frmAddItems.getContentPane().add(button);
 			
 			JButton button_1 = new JButton("+");
@@ -261,7 +231,7 @@ public class AdderForm {
 					Quantity.setText(q.toString());
 				}
 			});
-			button_1.setBounds(206, 346, 52, 40);
+			button_1.setBounds(206, 372, 52, 40);
 			frmAddItems.getContentPane().add(button_1);
 			
 			JLabel lblEnterTheItem = new JLabel("Enter the item to be searched:");
@@ -269,7 +239,7 @@ public class AdderForm {
 			frmAddItems.getContentPane().add(lblEnterTheItem);
 			
 			JLabel lblListOfItems = new JLabel("List of items found: ");
-			lblListOfItems.setBounds(73, 108, 188, 14);
+			lblListOfItems.setBounds(73, 134, 188, 14);
 			frmAddItems.getContentPane().add(lblListOfItems);
 			
 			JLabel lblSelectQuantityTo = new JLabel("Select Quantity to be added:");
@@ -280,7 +250,7 @@ public class AdderForm {
 			Quantity.setFont(new Font("Tahoma", Font.PLAIN, 17));
 			Quantity.setText("1");
 			Quantity.setHorizontalAlignment(SwingConstants.RIGHT);
-			Quantity.setBounds(122, 346, 86, 41);
+			Quantity.setBounds(122, 372, 86, 41);
 			frmAddItems.getContentPane().add(Quantity);
 			Quantity.setColumns(10);
 			
@@ -307,10 +277,13 @@ public class AdderForm {
 				}
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			btnAdd.setBounds(454, 346, 100, 40);
+			btnAdd.setBounds(454, 372, 100, 40);
 			frmAddItems.getContentPane().add(btnAdd);
 			
 			frmAddItems.getContentPane().add(comboBox);
+			
+			progressBar.setBounds(73, 97, 480, 25);
+			frmAddItems.getContentPane().add(progressBar);
 			frmAddItems.setVisible(true);
 			
 			
@@ -365,8 +338,6 @@ public class AdderForm {
 	    
 
 	    return new DefaultTableModel(data, columnNames);
-
 	}
-	
 }
 

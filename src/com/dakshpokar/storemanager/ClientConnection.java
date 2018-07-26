@@ -1,24 +1,27 @@
 package com.dakshpokar.storemanager;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
+
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.JProgressBar;
+import javax.swing.table.DefaultTableModel;
 
 public class ClientConnection implements Runnable{
 	private Socket socket = null;
-	private DataInputStream input = null;
-	private DataOutputStream output = null;
+	private ObjectOutputStream oos;
+	private ObjectInputStream ois;
+	private Query query;
 	public ClientConnection() {
 
 	}
 	public void run() {
 		try {
 			socket = new Socket("127.0.0.1", 3160);
-			System.out.println("Connected to Client!");
-			input = new DataInputStream(System.in);
-			output = new DataOutputStream(socket.getOutputStream());
+			System.out.println("Connected to Server!");
 		}
 		catch(UnknownHostException u){
 			System.out.println(u);
@@ -26,28 +29,51 @@ public class ClientConnection implements Runnable{
 		catch(IOException i){
 			System.out.println(i);
 		}
-		
-		String line = "";
-		
-		while(!line.equals("Over")){
-			try{
-				line = input.readLine();
-				output.writeUTF(line);
-			}
-			catch(IOException i){
-				System.out.println(i);
+	}
+	public VectorWrapper sendQuery(Query query) {
+		this.query = query;
+		try {
+			oos = new ObjectOutputStream(socket.getOutputStream());
+			oos.writeObject(query);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(query.getType() == 0) {
+			try {
+				return receiveVector();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
-		try
-        {
-            input.close();
-            output.close();
-            socket.close();
-        }
-        catch(IOException i)
-        {
-            System.out.println(i);
-        }		
+		else {
+			return null;
+		}
+		return null;
 	}
-
+	public DefaultTableModel builderFromSender(Query query) {
+		AdderForm.progressBar = new JProgressBar();
+		AdderForm.progressBar.setValue(10);
+		DefaultTableModel model = null;
+		VectorWrapper vw = sendQuery(query);
+		AdderForm.progressBar.setValue(30);
+		model = new DefaultTableModel(vw.getData(),vw.getColumnNames());
+		AdderForm.progressBar.setValue(100);
+		return model;
+	}
+	public VectorWrapper receiveVector() throws IOException, ClassNotFoundException {
+		ois = new ObjectInputStream(socket.getInputStream());
+		SerializedVector x = (SerializedVector)ois.readObject();
+		return x.getVector();
+	}
+	public void close() {
+		try {
+			oos.close();
+			ois.close();
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

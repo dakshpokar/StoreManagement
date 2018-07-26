@@ -24,7 +24,7 @@ public class LoginForm {
 	private String password;
 	private int priv;
 	public static DatabaseConnection databaseConn;
-	
+	private static Integer user_id;
 	 
 	/**
 	 * Launch the application.
@@ -106,6 +106,9 @@ public class LoginForm {
 		if(username.equals("")) {
 			username = "dakshpokar";
 		}
+		if(username.equals("a")) {
+			username = "anikotalwar";
+		}
 		if(password.equals("")) {
 			password = "password";
 		}
@@ -139,6 +142,7 @@ public class LoginForm {
 			if(password.equals(rs.getString(3)))
 			{
 				priv = Integer.parseInt(rs.getString(4));
+				user_id = Integer.parseInt(rs.getString(1));
 				clientWindow = new ClientDashboard();
 				clientWindow.frmDashboard.setVisible(true);
 				frmLogin.setVisible(false);
@@ -170,5 +174,8 @@ public class LoginForm {
 		         se.printStackTrace();
 		      }//end finally try
 		   }//end try
+	}
+	public static Integer getUserID() {
+		return user_id;
 	}
 }
