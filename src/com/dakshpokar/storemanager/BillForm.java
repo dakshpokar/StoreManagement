@@ -251,7 +251,6 @@ public class BillForm {
 						float itemPrice = Float.parseFloat(table.getValueAt(i, 3).toString());
 						int itemQuantity = Integer.parseInt(table.getValueAt(i, 4).toString());
 						s = "insert into bill"+id+" values("+itemID+", \""+itemName+"\","+"\""+itemCat+"\","+itemPrice+", "+itemQuantity+")";
-						System.out.println(s);
 						ERP.loginForm.clientWindow.clientConnection.sendQuery(new Query(s,1,1));
 						i++;
 					}
