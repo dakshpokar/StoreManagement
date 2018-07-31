@@ -29,6 +29,8 @@ import java.awt.Color;
 
 import javax.swing.SwingConstants;
 
+import com.mysql.jdbc.PreparedStatement;
+
 public class BillForm {
 
 	public JFrame frmBill;
@@ -233,6 +235,36 @@ public class BillForm {
 		tax.setBackground(Color.WHITE);
 		tax.setBounds(129, 321, 390, 25);
 		frmBill.getContentPane().add(tax);
+		
+		JButton btnSaveBills = new JButton("Save Bill");
+		btnSaveBills.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmBill.setVisible(false);
+				if(ERP.loginForm.getpriv() < 2){
+					String s;
+					int rowCount = table.getRowCount();
+					int i = 0;
+					while(i!=rowCount){
+						int itemID = Integer.parseInt(table.getValueAt(i, 0).toString());
+						String itemName = table.getValueAt(i, 1).toString();
+						String itemCat = table.getValueAt(i, 2).toString();
+						float itemPrice = Float.parseFloat(table.getValueAt(i, 3).toString());
+						int itemQuantity = Integer.parseInt(table.getValueAt(i, 4).toString());
+						s = "insert into bill"+id+" values("+itemID+", \""+itemName+"\","+"\""+itemCat+"\","+itemPrice+", "+itemQuantity+")";
+						ERP.loginForm.clientWindow.clientConnection.sendQuery(new Query(s,1,1));
+						i++;
+					}
+					float total = Float.parseFloat(finaltotal.getText().toString());
+					s = "update bills set bill_total = "+total+" where bill_id = "+id;
+					ERP.loginForm.clientWindow.clientConnection.sendQuery(new Query(s, 1, 1));
+				}
+				else{
+					
+				}
+			}
+		});
+		btnSaveBills.setBounds(552, 347, 134, 40);
+		frmBill.getContentPane().add(btnSaveBills);
 		frmBill.setVisible(true);
 		
 	}
