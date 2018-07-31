@@ -88,9 +88,9 @@ public class ClientDashboard {
 					else{
 						id = (Integer)(data.get(0)).get(0) + 1;
 					}
-					String create;
-					create = "create table bill"+id+"(item_id int, item_name varchar(255), item_category varchar(255), item_price bigint, item_quantity int)";
-					clientConnection.sendQuery(new Query(create, 1, 1));
+					//String create;
+					//create = "create table bill"+id+"(item_id int, item_name varchar(255), item_category varchar(255), item_price bigint, item_quantity int)";
+					//clientConnection.sendQuery(new Query(create, 1, 1));
 					String insertTable;
 					insertTable = "insert into bills values("+id+","+"'bill"+id+"', 0, 'None', "+LoginForm.getUserID()+")";
 					clientConnection.sendQuery(new Query(insertTable, 1, 1));
