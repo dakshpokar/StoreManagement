@@ -74,7 +74,7 @@ public class BillForm {
 				if(dialogResult == JOptionPane.YES_OPTION){
 					System.out.println("Bill Deleted!");
 					ClientDashboard.clientConnection.sendQuery(new Query("delete from bills where bill_id="+id, 1,1));
-					ClientDashboard.clientConnection.sendQuery(new Query("drop table bill"+id,1,1));
+					//ClientDashboard.clientConnection.sendQuery(new Query("drop table bill"+id,1,1));
 					frmBill.dispose();
 				}
 				else
@@ -250,7 +250,7 @@ public class BillForm {
 						String itemCat = table.getValueAt(i, 2).toString();
 						float itemPrice = Float.parseFloat(table.getValueAt(i, 3).toString());
 						int itemQuantity = Integer.parseInt(table.getValueAt(i, 4).toString());
-						s = "insert into bill"+id+" values("+itemID+", \""+itemName+"\","+"\""+itemCat+"\","+itemPrice+", "+itemQuantity+")";
+						s = "insert into bill_details"+" values("+itemID+","+id+", \""+itemName+"\","+"\""+itemCat+"\","+itemPrice+", "+itemQuantity+")";
 						ERP.loginForm.clientWindow.clientConnection.sendQuery(new Query(s,1,1));
 						i++;
 					}
