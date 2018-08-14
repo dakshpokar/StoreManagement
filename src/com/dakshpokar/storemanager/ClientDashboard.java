@@ -66,6 +66,12 @@ public class ClientDashboard {
 		frmDashboard.setTitle("Dashboard");
 		if(ERP.loginForm.getpriv()>=2) {
 			frmDashboard.setBounds(100, 100, 360, 380);
+			try {
+				new Thread(new Server()).start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else {
 			joinServer();

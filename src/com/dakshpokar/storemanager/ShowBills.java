@@ -14,11 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ShowBills {
 
 	public JFrame frmBills;
 	private JTextField textField;
+	JTable table;
 
 	/**
 	 * Launch the application.
@@ -40,7 +43,7 @@ public class ShowBills {
 		frmBills.setBounds(100, 100, 550, 400);
 		String sql;
 		sql = "select * from bills";
-		JTable table = new JTable(ClientDashboard.clientConnection.builderFromSender((new Query(sql, 0, 1)))){
+		table = new JTable(ClientDashboard.clientConnection.builderFromSender((new Query(sql, 0, 1)))){
 			public boolean isCellEditable(int row, int column){
 			    return false;
 			  }
@@ -60,6 +63,21 @@ public class ShowBills {
 		textField = new JTextField();
 		textField.setFont(new Font("Dialog", Font.PLAIN, 18));
 		textField.setBounds(37, 46, 476, 40);
+		textField.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				String s;
+				if(!textField.getText().toString().equalsIgnoreCase("")){
+					Integer bill_id = Integer.parseInt(textField.getText().toString());
+					s= "select * from bills where bill_id = "+bill_id;
+					table.setModel(ClientDashboard.clientConnection.builderFromSender((new Query(s, 0, 1))));
+				}
+				else{
+					table.setModel(ClientDashboard.clientConnection.builderFromSender((new Query("select * from bills", 0, 1))));
+
+				}
+			}
+			
+		});
 		frmBills.getContentPane().add(textField);
 		
 		JLabel label_1 = new JLabel("Enter the item to be searched:");
