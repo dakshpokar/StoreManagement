@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
+-- MySQL dump 10.14  Distrib 5.5.43-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: bills
 -- ------------------------------------------------------
--- Server version	5.7.22-0ubuntu0.17.10.1
+-- Server version	5.5.43-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS `bill_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bill_details` (
-  `item_id` int(11) NOT NULL,
+  `item_id` int(11) DEFAULT NULL,
   `bill_id` int(11) DEFAULT NULL,
-  `item_name` varchar(255) DEFAULT NULL,
-  `item_category` varchar(255) DEFAULT NULL,
+  `item_name` varchar(200) DEFAULT NULL,
+  `item_category` varchar(200) DEFAULT NULL,
   `item_price` bigint(20) DEFAULT NULL,
   `item_quantity` int(11) DEFAULT NULL,
   KEY `bill_id` (`bill_id`),
-  CONSTRAINT `bill_details_ibfk_1` FOREIGN KEY (`bill_id`) REFERENCES `bills` (`bill_id`)
+  CONSTRAINT `bill_details_ibfk_1` FOREIGN KEY (`bill_id`) REFERENCES `bills` (`bill_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,7 +40,6 @@ CREATE TABLE `bill_details` (
 
 LOCK TABLES `bill_details` WRITE;
 /*!40000 ALTER TABLE `bill_details` DISABLE KEYS */;
-INSERT INTO `bill_details` VALUES (6,1,'Apple','Food',100,2),(5,1,'TV-Remote','Electronics',1000,1),(1,2,'Banana','Food',100,1),(8,2,'Levi`s Shirt','Clothing',1000000,1),(6,3,'Apple','Food',100,1),(5,3,'TV-Remote','Electronics',1000,1),(1,3,'Banana','Food',100,1),(8,3,'Levi`s Shirt','Clothing',1000000,1);
 /*!40000 ALTER TABLE `bill_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +66,7 @@ CREATE TABLE `bills` (
 
 LOCK TABLES `bills` WRITE;
 /*!40000 ALTER TABLE `bills` DISABLE KEYS */;
-INSERT INTO `bills` VALUES (1,'bill1',1260.00,'None',2),(2,'bill2',1050105.00,'None',2),(3,'bill3',1051260.00,'None',2);
+INSERT INTO `bills` VALUES (1,'bill1',0.00,'None',2),(2,'bill2',0.00,'None',2);
 /*!40000 ALTER TABLE `bills` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -80,4 +79,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-31 22:04:56
+-- Dump completed on 2018-08-14 11:59:58
