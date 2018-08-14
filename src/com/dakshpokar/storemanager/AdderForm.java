@@ -125,14 +125,9 @@ public class AdderForm {
 		
 		try {
 			Class.forName(JDBC_DRIVER);
-			System.out.println("Connecting to Database....");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			System.out.println("Creating statement");
-			stmt = conn.createStatement();
 			String sql;
 			sql = "select * from itemlist";
-			rs = stmt.executeQuery(sql);
-			table = new JTable(buildTableModel(rs)){
+			table = new JTable(ClientDashboard.clientConnection.builderFromSender((new Query(sql, 0, 0)))){
 				public boolean isCellEditable(int row, int column){
 				    return false;
 				  }
@@ -140,15 +135,14 @@ public class AdderForm {
 					   return getPreferredSize().width < getParent().getWidth();
 					 }
 			};
-			rs.close();
+
 			String catsql;
 			comboBox.addItem("All");
-			catsql = "select * from itemcategory";
-			rs3 = stmt.executeQuery(catsql);
-			while(rs3.next())
+			Vector<Vector<Object>> data = ClientDashboard.clientConnection.sendQuery(new Query("select * from itemcategory", 0,0)).getData();
+			Iterator<Vector<Object>> itr = data.iterator();
+			while(itr.hasNext())
 			{
-				rs3.getRow();
-				comboBox.addItem(rs3.getString(1));
+				comboBox.addItem(itr.next().get(0).toString());
 			}
 			txtpnEnterAKeyword.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {
@@ -287,10 +281,6 @@ public class AdderForm {
 			frmAddItems.setVisible(true);
 			
 			
-		}
-		catch(SQLException se)
-		{
-			se.printStackTrace();
 		}
 		catch(Exception e)
 		{
