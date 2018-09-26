@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
-
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
@@ -21,6 +21,8 @@ import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.UIManager;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
@@ -70,7 +72,7 @@ public class ClientDashboard {
 		frmDashboard.setTitle("Dashboard");
 		frmDashboard.setUndecorated(true);
 		if(ERP.loginForm.getpriv()>=2) {
-			frmDashboard.setBounds(100, 100, 690, 380);
+			frmDashboard.setBounds(100, 100, 750, 380);
 			try {
 				new Thread(new Server()).start();
 			} catch (IOException e) {
@@ -80,7 +82,7 @@ public class ClientDashboard {
 		}
 		else {
 			joinServer();
-			frmDashboard.setBounds(100, 100, 690, 300);
+			frmDashboard.setBounds(100, 100, 750, 300);
 		}
 		//frmDashboard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDashboard.getContentPane().setLayout(null);
@@ -88,6 +90,7 @@ public class ClientDashboard {
 		stmt = DatabaseConnection.stmt;
 		
 		JButton btnNewButton = new JButton("New Bill");
+		btnNewButton.setBorderPainted(false);
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -111,10 +114,11 @@ public class ClientDashboard {
 				}
 			}
 		});
-		btnNewButton.setBounds(58, 90, 117, 40);
+		btnNewButton.setBounds(257, 141, 117, 40);
 		frmDashboard.getContentPane().add(btnNewButton);
 		
 		JButton btnShowBills = new JButton("Show Bills");
+		btnShowBills.setBorderPainted(false);
 		btnShowBills.setForeground(Color.WHITE);
 		btnShowBills.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -123,21 +127,8 @@ public class ClientDashboard {
 				
 			}
 		});
-		btnShowBills.setBounds(173, 90, 117, 40);
+		btnShowBills.setBounds(394, 141, 117, 40);
 		frmDashboard.getContentPane().add(btnShowBills);
-		
-		JLabel lblWelcome = new JLabel("Welcome,");
-		lblWelcome.setForeground(Color.WHITE);
-		lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblWelcome.setBounds(35, 31, 78, 20);
-		frmDashboard.getContentPane().add(lblWelcome);
-		
-		JLabel lblUsername = new JLabel("username!");
-		lblUsername.setForeground(Color.WHITE);
-		lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblUsername.setBounds(114, 31, 107, 20);
-		frmDashboard.getContentPane().add(lblUsername);
-		lblUsername.setText(ERP.loginForm.getUsername());
 		JButton btnAddItems = new JButton("Add Items");
 		btnAddItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -158,15 +149,16 @@ public class ClientDashboard {
 		
 		JLabel lblBillRelated = new JLabel("Bill Related:");
 		lblBillRelated.setForeground(Color.WHITE);
-		lblBillRelated.setBounds(58, 65, 188, 14);
+		lblBillRelated.setBounds(257, 116, 188, 14);
 		frmDashboard.getContentPane().add(lblBillRelated);
 		
 		JLabel lblItemRelated = new JLabel("Item Related:");
 		lblItemRelated.setForeground(Color.WHITE);
-		lblItemRelated.setBounds(58, 159, 188, 14);
+		lblItemRelated.setBounds(257, 184, 188, 14);
 		frmDashboard.getContentPane().add(lblItemRelated);
 		
 		JButton btnShowItems = new JButton("Show Items");
+		btnShowItems.setBorderPainted(false);
 		btnShowItems.setForeground(Color.WHITE);
 		btnShowItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -182,7 +174,7 @@ public class ClientDashboard {
 				showItemsForm.frame.setVisible(true);
 			}
 		});
-		btnShowItems.setBounds(58, 184, 117, 40);
+		btnShowItems.setBounds(257, 203, 117, 40);
 		frmDashboard.getContentPane().add(btnShowItems);
 		
 		final JLabel lblLogout = new JLabel("Logout");
@@ -208,10 +200,18 @@ public class ClientDashboard {
 		});
 		lblLogout.setForeground(Color.WHITE);
 		lblLogout.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblLogout.setBounds(242, 31, 75, 20);
+		lblLogout.setBounds(391, 95, 75, 20);
 		frmDashboard.getContentPane().add(lblLogout);
 		
+		DraggablePanel draggablePanel = new DraggablePanel(frmDashboard);
+		draggablePanel.setLayout(null);
+		draggablePanel.setBackground(new Color(0, 0, 0, 0));
+		draggablePanel.setBounds(0, 0, 751, 30);
+		frmDashboard.getContentPane().add(draggablePanel);
+		
 		JLabel label = new JLabel("X");
+		label.setBounds(711, 0, 40, 34);
+		draggablePanel.add(label);
 		label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -221,14 +221,37 @@ public class ClientDashboard {
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setForeground(Color.WHITE);
 		label.setFont(new Font("Microsoft Sans Serif", Font.PLAIN, 22));
-		label.setBounds(650, 0, 40, 34);
-		frmDashboard.getContentPane().add(label);
 		
-		DraggablePanel draggablePanel = new DraggablePanel(frmDashboard);
-		draggablePanel.setLayout(null);
-		draggablePanel.setBackground(new Color(0, 0, 0, 0));
-		draggablePanel.setBounds(0, 0, 691, 30);
-		frmDashboard.getContentPane().add(draggablePanel);
+		DraggablePanel draggablePanel_1 = new DraggablePanel((JFrame) null);
+		draggablePanel_1.setLayout(null);
+		draggablePanel_1.setBackground(SystemColor.textHighlight);
+		draggablePanel_1.setBounds(0, 0, 221, 500);
+		frmDashboard.getContentPane().add(draggablePanel_1);
+		
+		JLabel lblImage = new JLabel("");
+		lblImage.setBounds(10, 39, 79, 52);
+		draggablePanel_1.add(lblImage);
+		Image img = new ImageIcon(this.getClass().getResource("/user.png")).getImage().getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), Image.SCALE_DEFAULT);
+		lblImage.setIcon(new ImageIcon(img));
+		
+		JLabel lblWelcome = new JLabel("Welcome");
+		lblWelcome.setBounds(89, 42, 78, 20);
+		draggablePanel_1.add(lblWelcome);
+		lblWelcome.setForeground(Color.WHITE);
+		lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		
+		JLabel lblUsername = new JLabel("username!");
+		lblUsername.setBounds(89, 61, 107, 20);
+		draggablePanel_1.add(lblUsername);
+		lblUsername.setForeground(Color.WHITE);
+		lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblUsername.setText(ERP.loginForm.getUsername());
+		
+		JLabel label_1 = new JLabel("Welcome");
+		label_1.setForeground(Color.WHITE);
+		label_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		label_1.setBounds(89, 73, 78, 25);
+		draggablePanel_1.add(label_1);
 		if(ERP.loginForm.getpriv() >=2) {
 		JLabel lblServerRelated = new JLabel("Server Related:");
 		lblServerRelated.setBounds(58, 245, 188, 14);
