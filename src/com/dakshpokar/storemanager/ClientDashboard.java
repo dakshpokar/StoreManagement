@@ -26,6 +26,7 @@ import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class ClientDashboard {
 
@@ -63,9 +64,13 @@ public class ClientDashboard {
 	}
 	private void initialize() throws SQLException {
 		frmDashboard = new JFrame();
+		frmDashboard.setForeground(Color.WHITE);
+		frmDashboard.getContentPane().setBackground(Color.DARK_GRAY);
+		frmDashboard.setBackground(Color.DARK_GRAY);
 		frmDashboard.setTitle("Dashboard");
+		frmDashboard.setUndecorated(true);
 		if(ERP.loginForm.getpriv()>=2) {
-			frmDashboard.setBounds(100, 100, 360, 380);
+			frmDashboard.setBounds(100, 100, 690, 380);
 			try {
 				new Thread(new Server()).start();
 			} catch (IOException e) {
@@ -75,7 +80,7 @@ public class ClientDashboard {
 		}
 		else {
 			joinServer();
-			frmDashboard.setBounds(100, 100, 360, 300);
+			frmDashboard.setBounds(100, 100, 690, 300);
 		}
 		//frmDashboard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDashboard.getContentPane().setLayout(null);
@@ -83,6 +88,7 @@ public class ClientDashboard {
 		stmt = DatabaseConnection.stmt;
 		
 		JButton btnNewButton = new JButton("New Bill");
+		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(ERP.loginForm.getpriv() < 2) {
@@ -109,6 +115,7 @@ public class ClientDashboard {
 		frmDashboard.getContentPane().add(btnNewButton);
 		
 		JButton btnShowBills = new JButton("Show Bills");
+		btnShowBills.setForeground(Color.WHITE);
 		btnShowBills.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sBForm = new ShowBills();
@@ -120,11 +127,13 @@ public class ClientDashboard {
 		frmDashboard.getContentPane().add(btnShowBills);
 		
 		JLabel lblWelcome = new JLabel("Welcome,");
+		lblWelcome.setForeground(Color.WHITE);
 		lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblWelcome.setBounds(35, 31, 78, 20);
 		frmDashboard.getContentPane().add(lblWelcome);
 		
 		JLabel lblUsername = new JLabel("username!");
+		lblUsername.setForeground(Color.WHITE);
 		lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblUsername.setBounds(114, 31, 107, 20);
 		frmDashboard.getContentPane().add(lblUsername);
@@ -148,14 +157,17 @@ public class ClientDashboard {
 		
 		
 		JLabel lblBillRelated = new JLabel("Bill Related:");
+		lblBillRelated.setForeground(Color.WHITE);
 		lblBillRelated.setBounds(58, 65, 188, 14);
 		frmDashboard.getContentPane().add(lblBillRelated);
 		
 		JLabel lblItemRelated = new JLabel("Item Related:");
+		lblItemRelated.setForeground(Color.WHITE);
 		lblItemRelated.setBounds(58, 159, 188, 14);
 		frmDashboard.getContentPane().add(lblItemRelated);
 		
 		JButton btnShowItems = new JButton("Show Items");
+		btnShowItems.setForeground(Color.WHITE);
 		btnShowItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -194,10 +206,29 @@ public class ClientDashboard {
 				ERP.loginForm.reset();
 			}
 		});
-		lblLogout.setForeground(SystemColor.textHighlight);
+		lblLogout.setForeground(Color.WHITE);
 		lblLogout.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblLogout.setBounds(242, 31, 75, 20);
 		frmDashboard.getContentPane().add(lblLogout);
+		
+		JLabel label = new JLabel("X");
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				frmDashboard.dispose();
+			}
+		});
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setForeground(Color.WHITE);
+		label.setFont(new Font("Microsoft Sans Serif", Font.PLAIN, 22));
+		label.setBounds(650, 0, 40, 34);
+		frmDashboard.getContentPane().add(label);
+		
+		DraggablePanel draggablePanel = new DraggablePanel(frmDashboard);
+		draggablePanel.setLayout(null);
+		draggablePanel.setBackground(new Color(0, 0, 0, 0));
+		draggablePanel.setBounds(0, 0, 691, 30);
+		frmDashboard.getContentPane().add(draggablePanel);
 		if(ERP.loginForm.getpriv() >=2) {
 		JLabel lblServerRelated = new JLabel("Server Related:");
 		lblServerRelated.setBounds(58, 245, 188, 14);

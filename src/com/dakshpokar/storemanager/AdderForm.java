@@ -86,6 +86,7 @@ public class AdderForm {
 	 */
 	private void initialize() throws SQLException {
 		frmAddItems = new JFrame();	
+		frmAddItems.setUndecorated(true);
 		frmAddItems.setTitle("Add Items");
 		frmAddItems.setBounds(100, 100, 650, 484);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
